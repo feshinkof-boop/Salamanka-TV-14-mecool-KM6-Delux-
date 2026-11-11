@@ -1,26 +1,27 @@
-name: Documentation sanity
+name: Host tools and document checks
 on:
   push:
-    paths:
-      - "**.md"
-      - "**.csv"
-      - ".github/workflows/docs-check.yml"
   pull_request:
-    paths:
-      - "**.md"
-      - "**.csv"
+permissions:
+  contents: read
 jobs:
-  check:
+  host:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify project structure and no accidentally committed binary images
+      - name: Python syntax
+        run: python3 -m compileall -q tools tests
+      - name: Synthetic audit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Metadata JSON
+        run: python3 -m json.tool docs/BUILD-ARTIFACTS-2026-11-03.json >/dev/null
+      - name: Missing docs and suspicious public files
         run: |
           set -eu
           test -s README.md
           test -s docs/STATUS.md
           test -s security/XCPE-VIDEOSTRONG.md
-          if find . -type f \( -name '*.img' -o -name '*.key' -o -name '*.pem' -o -name '*.pcap' \) | grep .; then
-            echo "Review binary/image/secret files before pushing" >&2
-            exit 1
+          if find . -type f \( -name '*.img' -o -name '*.pem' -o -name '*.key' -o -name '*.pcap' \) | grep -q .; then
+             echo "Unexpected binary/device/private artifact" >&2
+             exit 1
           fi
