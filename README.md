@@ -42,6 +42,16 @@ See [development status](docs/STATUS.md), [engineering backlog](docs/ROADMAP.md)
 - `issues/` — prioritized, actionable engineering blockers.
 - `.github/` — contribution and security reporting guidance.
 
+## Real, tested host tooling
+
+The repository now includes [`tools/rom_audit.py`](tools/rom_audit.py), a **read-only** offline inventory scanner for already-extracted partition files. It records SHA-256 file hashes, detects ELF32/ELF64 architecture, scans a bounded selection of XCPE indicators and decompressed APK/JAR content, and reports coverage gaps. [Documentation](docs/TOOLS.md) · [18 synthetic tests](tests/test_rom_audit.py) · [CI results](../../actions/workflows/docs-check.yml).
+
+These tests validate the utility itself, **not** a firmware image or the actual KM6. A zero-hit scan does not prove a ROM is clean.
+
+## Tracked engineering work
+
+[11 actionable issues](../../issues) cover VINTF, real source import, firmware audit, AV1 decoding, V01 voice remote, analog/SPDIF/HDMI audio, boot recovery, connectivity, video timing, and secure release design. The [P0 blockers](issues/P0-BLOCKERS.md) remain release-blocking.
+
 ## Verified research correction
 
 The original repository misidentified the Android 14 FCM level. Android 14 is level **8**, while **202404 belongs to Android 15**. See [FCM analysis](docs/FCM-ANALYSIS.md). A failed VINTF check does not establish a hardware compositor solution.

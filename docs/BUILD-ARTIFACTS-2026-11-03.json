@@ -1,21 +1,24 @@
 {
   "schema": "salamanka.build-summary.v1",
-  "source": "User/OpenCode report from 2026-11-03, not independently reproduced in this GitHub session",
   "date": "2026-11-03",
+  "source": "Earlier user/OpenCode progress report. Original build images, checksums, and complete logs are not available in this GitHub session.",
+  "reported_built_images": [
+    "system.img",
+    "system_ext.img",
+    "vendor.img",
+    "product.img",
+    "odm.img",
+    "super.img",
+    "vbmeta_system.img"
+  ],
+  "image_sizes_bytes": null,
   "hardware_tested": false,
-  "image_sizes_bytes": {
-    "system.img": 984731648,
-    "system_ext.img": 187654144,
-    "vendor.img": 90198016,
-    "product.img": 297123840,
-    "odm.img": 348160,
-    "super.img": 1677721600
-  },
-  "reported_super_free_mib": 111.2,
-  "verification_gaps": [
-    "Original SHA-256 hashes and source commits not present",
-    "Actual dynamic partition metadata not reverified",
-    "Android 14 kernel/HAL on-device boot not demonstrated",
-    "VINTF FCM 202404 error uninvestigated"
+  "original_source_commit": null,
+  "sha256_manifest": null,
+  "validation_gaps": [
+    "Do not infer precise image sizes or hash digests: original artifact inventory not accessible",
+    "No successful Android 14 KM6 device boot demonstrated",
+    "No hardware media, audio or remote proof",
+    "Reported FCM 202404 failure requires checking full build logs and declarations"
   ]
 }
