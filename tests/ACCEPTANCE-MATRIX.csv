@@ -1,0 +1,13 @@
+id,area,acceptance,required_evidence,status
+A01,architecture,ARM64-only running Android 14,adb props and linker/service audit,UNKNOWN
+A02,boot,repeatable cold boots and recovery,boot logs and rollback demonstration,UNKNOWN
+A03,graphics,accelerated Android composition,AIDL Composer3 and actual frames/trace,BLOCKED
+A04,video,HW AVC HEVC AV1 4K decode,MediaCodec identity + playback trace,UNKNOWN
+A05,audio,HDMI SPDIF analog output,receiver logs + PCM passthrough samples,UNKNOWN
+A06,network,gigabit ethernet + 2.4/5GHz WiFi,ip link + throughput + resume tests,UNKNOWN
+A07,remote,V01 mic and Bluetooth navigation,voice capture + HID event logs,UNKNOWN
+A08,display,SDR HDR10 AFR EDID CEC,mode logs and display observation,UNKNOWN
+A09,power,suspend/resume and no unintended wakes,overnight suspend event logs,UNKNOWN
+A10,storage,SD USB and eMMC reliability,filesystem stress and error logs,UNKNOWN
+A11,stability,72h multimedia network soak,crash thermal and memory reports,UNKNOWN
+A12,security,known IOC free full provenance and SELinux enforcing,SBOM static analysis network capture reset test,UNKNOWN

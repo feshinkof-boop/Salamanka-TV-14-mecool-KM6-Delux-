@@ -1,0 +1,26 @@
+name: Documentation sanity
+on:
+  push:
+    paths:
+      - "**.md"
+      - "**.csv"
+      - ".github/workflows/docs-check.yml"
+  pull_request:
+    paths:
+      - "**.md"
+      - "**.csv"
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify project structure and no accidentally committed binary images
+        run: |
+          set -eu
+          test -s README.md
+          test -s docs/STATUS.md
+          test -s security/XCPE-VIDEOSTRONG.md
+          if find . -type f \( -name '*.img' -o -name '*.key' -o -name '*.pem' -o -name '*.pcap' \) | grep .; then
+            echo "Review binary/image/secret files before pushing" >&2
+            exit 1
+          fi
