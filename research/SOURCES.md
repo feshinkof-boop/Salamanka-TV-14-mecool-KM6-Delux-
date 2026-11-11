@@ -22,3 +22,6 @@
 ## Source confidence
 
 An independent technical investigation by Google is not interchangeable with a community hypothesis. A report about KM6 Classic, Rev2 or a different S905X4 board does not establish the same behavior on Deluxe Rev1. The Synthient `KM6` identifier alone is not a unique infection confirmation of our unit.
+## Authoritative Android compatibility references
+- https://source.android.com/docs/core/architecture/vintf/fcm — FCM 8 for Android 14; 202404 for Android 15.
+- https://source.android.com/docs/core/graphics/aidl-hwc — AIDL Composer3 and HIDL deprecation.

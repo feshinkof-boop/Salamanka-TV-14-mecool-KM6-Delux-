@@ -1,7 +1,7 @@
 # Actionable P0 blockers
 
 1. **Independent XCPE supply chain audit:** examine real Android 14 and donor images; complete `security/BINARY-PROVENANCE.csv`. Do not assume a model-family match establishes compromise.
-2. **Android 14 HAL VINTF:** replace/bridge declared HIDL Composer 2.4 with AIDL Composer3-compatible implementation; validate the level-202404 framework requirement and test KMS presentation.
+2. **Android 14 HAL VINTF:** investigate why an Android 14 build used Android 15-level FCM 202404; compare real manifests against Android 14 FCM 8, then demonstrate KMS composition. AIDL migration is an option, not a presumed mandate.
 3. **64-bit-only runtime:** investigate any 32-bit-only legacy Amlogic HAL and build verified ARM64 replacements.
 4. **Hardware video decode:** determine VPU driver, Codec2/MediaCodec service and 4K AV1/HEVC support under the selected kernel.
 5. **Audio:** implement and test HDMI, optical SPDIF and analog routing on S905X4.

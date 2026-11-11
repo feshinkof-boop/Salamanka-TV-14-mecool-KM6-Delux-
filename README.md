@@ -23,7 +23,7 @@
 | Native AArch64 build artifacts | **HOST-VALIDATED** | ELF64/AArch64, ext4, dynamic super layout and test-key AVB checks reported passing |
 | Images | **BUILT, NOT DEVICE-TESTED** | `system.img`, `system_ext.img`, `vendor.img`, `product.img`, `odm.img`, `super.img`, `vbmeta_system.img` |
 | Linux 6.18.55 kernel | **BUILT** | S905X4 work including Meson DRM/HDMI and Panfrost integration |
-| Graphics composition | **BLOCKED / NOT VERIFIED** | Android 14 VINTF wants AIDL Composer3 at level 202404; project declared HIDL Composer 2.4 |
+| Graphics composition | **UNRESOLVED** | Earlier build used FCM 202404 (Android 15 level); Android 14 maps to FCM 8. See [correction](docs/FCM-ANALYSIS.md) |
 | Media hardware decoder, HDMI/SPDIF/analog audio | **UNKNOWN** | No successful full device validation |
 | Native ARM64-only runtime on KM6 | **UNPROVEN ON DEVICE** | Compile-time ELF checks are not boot evidence |
 | Android 14 device deployment | **NOT DONE** | No confirmed Salamanka TV 14 flashing or successful boot |
@@ -42,6 +42,10 @@ See [development status](docs/STATUS.md), [engineering backlog](docs/ROADMAP.md)
 - `issues/` — prioritized, actionable engineering blockers.
 - `.github/` — contribution and security reporting guidance.
 
+## Verified research correction
+
+The original repository misidentified the Android 14 FCM level. Android 14 is level **8**, while **202404 belongs to Android 15**. See [FCM analysis](docs/FCM-ANALYSIS.md). A failed VINTF check does not establish a hardware compositor solution.
+
 ## Safety and provenance
 
 **This public repository deliberately omits** device serial numbers, private LAN addresses, Wi-Fi credentials, TEE/DRM secrets, proprietary firmware binaries and unsigned device-flashing recipes. Archived investigations are historical and are **not** instructions to execute their flashing steps.
@@ -58,4 +62,4 @@ Many external reports are community observations; each document should distingui
 
 ## Licensing
 
-Project documentation is available under the [CC BY 4.0](LICENSE-DOCS.md) notice included here. This **does not** grant rights to third-party AOSP, kernel, firmware, blobs, images or trademarks. Source code added later must keep its applicable upstream licenses.
+No blanket license has been selected by the owner; see [project governance](docs/PROJECT-GOVERNANCE.md). Existing AOSP, kernel and third-party works retain their own licenses.

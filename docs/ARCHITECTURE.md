@@ -9,7 +9,7 @@
 
 ## Kernel and framework tracks
 
-**Track A — mainline-oriented:** Linux 6.18.x ARM64, Meson DRM/KMS, Panfrost Mali G31, GBM/gralloc, HDMI, regulator/clock/reset, video acceleration via verified codec stack. Work to integrate AIDL Composer3 for Android 14 framework compatibility.
+**Track A — mainline-oriented:** Linux 6.18.x ARM64, Meson DRM/KMS, Panfrost Mali G31, GBM/gralloc, HDMI, regulator/clock/reset, video acceleration via verified codec stack. Determine correct Android 14 FCM 8 compatibility first; HIDL 2.4 is deprecated but not automatically illegal. AIDL Composer3 may be a better long-term design, only after evidence and hardware validation.
 
 **Track B — audited Amlogic BSP reference:** inspect known-good hardware drivers, DTBs, firmware and HAL behavior without inheriting entire proprietary OS image; port or rewrite 64-bit services as necessary. No unvetted OEM packages, remote administration or network clients.
 

@@ -13,7 +13,7 @@
 
 | Gate | Requirements | State |
 |---|---|---|
-| A — architectural | 64-bit-only userspace verified on running Android, valid product/VINTF, AIDL Composer3 | BLOCKED / not device-tested |
+| A — architectural | 64-bit-only userspace verified on running Android, valid target FCM VINTF and functioning Composer implementation | BLOCKED / not device-tested |
 | B — boot and recovery | Cold boot, slot B, recovery path, no lost device credentials/provisioning | UNKNOWN |
 | C — video | Panfrost/graphics + Codec2/MediaCodec HW AVC/HEVC/AV1 4K, SDR/HDR | UNKNOWN |
 | D — audio | HDMI, SPDIF, analog, SPDIF surround compatible formats, lip sync | UNKNOWN |

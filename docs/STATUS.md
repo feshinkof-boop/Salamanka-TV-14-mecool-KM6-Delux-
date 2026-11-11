@@ -11,7 +11,7 @@
 - **2026-11-03:** AOSP image builds reported success: `system.img`, `system_ext.img`, `vendor.img`, `product.img`, `odm.img`, `super.img`, `vbmeta_system.img`. Host checks reported a consistent dynamic partition structure, ELF64/AArch64 binaries and AVB test-key structure.
 - **2026-11-11/12:** independent 4PDA and XCPE research incorporated; release security requirements elevated to P0.
 
-**Critical blocker:** One reported build declared HIDL Composer 2.4, whereas Android 14 framework compatibility target at VINTF level 202404 requires AIDL Composer3. Do not mark Android composition compatible until that mismatch is resolved and tested.
+**Correction (Nov 12):** Android 14 corresponds to FCM **8**; FCM **202404** is Android 15. The build's reported checkvintf failure at 202404 with declared HIDL Composer 2.4 requires inspection of the **actual** matrices and declarations. It is not proof AIDL Composer3 is universally mandatory for Android 14. [Investigation](FCM-ANALYSIS.md). Compositor runtime remains untested.
 
 ## Device-verified historic findings (from Oct 26 report)
 

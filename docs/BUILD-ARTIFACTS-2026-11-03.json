@@ -1,0 +1,21 @@
+{
+  "schema": "salamanka.build-summary.v1",
+  "source": "User/OpenCode report from 2026-11-03, not independently reproduced in this GitHub session",
+  "date": "2026-11-03",
+  "hardware_tested": false,
+  "image_sizes_bytes": {
+    "system.img": 984731648,
+    "system_ext.img": 187654144,
+    "vendor.img": 90198016,
+    "product.img": 297123840,
+    "odm.img": 348160,
+    "super.img": 1677721600
+  },
+  "reported_super_free_mib": 111.2,
+  "verification_gaps": [
+    "Original SHA-256 hashes and source commits not present",
+    "Actual dynamic partition metadata not reverified",
+    "Android 14 kernel/HAL on-device boot not demonstrated",
+    "VINTF FCM 202404 error uninvestigated"
+  ]
+}

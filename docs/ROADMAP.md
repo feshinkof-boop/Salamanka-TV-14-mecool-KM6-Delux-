@@ -9,7 +9,7 @@ A project requirement is not a confirmed shipped feature. Every task is tracked 
 | P0-01 | Inventory/Audit stock, slimBOX and imported binary dependencies for XCPE, suspicious services and network access | SBOM + hashes + partitions + offline IOC results |
 | P0-02 | Real ARM64-only Android 14 boot | Device properties, running service architecture, screenshot + dmesg |
 | P0-03 | Recoverable image strategy and boot chain | Offline proofs, separate owner-approved recovery tests |
-| P0-04 | Fix Android 14 framework/HAL compatibility incl. AIDL Composer3 | VINTF check passes and compositor runs on hardware |
+| P0-04 | Identify FCM 202404 vs Android 14 FCM 8 configuration issue; resolve manifest/HAL compatibility and verify working composition | VINTF check passes and compositor runs on hardware |
 | P0-05 | Real accelerated playback H264/HEVC/AV1 | Decoder identity, CPU and frame-drop data on 4K samples |
 | P0-06 | HDMI, SPDIF, analog audio | Device/receiver tests, pause/resume, audio sync |
 | P0-07 | V01 remote microphone + navigation | HID/mic input through supported speech service |
