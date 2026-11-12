@@ -74,7 +74,7 @@ Many external reports are community observations; each document should distingui
 
 **[❤️ Support Salamanka TV 14 — English · Русский · 简体中文](SUPPORT.md)**
 
-Voluntary contributions can help fund test devices, driver research, and development infrastructure. Direct crypto addresses will only be published after the maintainer verifies them. **No active crypto receiving address has been published yet.** Contributions never imply a flashable release or guaranteed development outcome.
+Voluntary contributions can help fund test devices, driver research, and development infrastructure. Verified public **TON** and **Bitcoin mainnet** receiving addresses are now listed in [SUPPORT.md](SUPPORT.md). **USDT on TRON/TRC20 and USDT on TON are not enabled yet.** Contributions never imply a flashable release or guaranteed development outcome.
 
 ## Licensing
 
