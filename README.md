@@ -70,6 +70,12 @@ Many external reports are community observations; each document should distingui
 - [Synthient Videostrong IoCs](https://github.com/synthient/public-research/tree/main/2026/11/Videostrong)
 - [Plume XCPE research](https://www.plume.com/resources/the-x-cpe-botnet)
 
+## Support development / Поддержать проект / 支持开发
+
+**[❤️ Support Salamanka TV 14 — English · Русский · 简体中文](SUPPORT.md)**
+
+Voluntary contributions can help fund test devices, driver research, and development infrastructure. Direct crypto addresses will only be published after the maintainer verifies them. **No active crypto receiving address has been published yet.** Contributions never imply a flashable release or guaranteed development outcome.
+
 ## Licensing
 
 No blanket license has been selected by the owner; see [project governance](docs/PROJECT-GOVERNANCE.md). Existing AOSP, kernel and third-party works retain their own licenses.
