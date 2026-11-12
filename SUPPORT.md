@@ -5,7 +5,7 @@
 Thank you for supporting **Salamanka TV 14**, an independent Android TV 14 / native ARM64 firmware engineering project for the **MECOOL KM6 Deluxe Rev 1**.
 
 > [!IMPORTANT]
-> **Crypto donation addresses are not published yet.** No payment destination is active in this document. Never send funds to a placeholder, an address posted by a third party, or an address received in an unsolicited message.
+> **Verified wallet addresses for TON and Bitcoin are published below.** They were read from the maintainer's Trust Wallet receiving QR codes and passed format/checksum validation. USDT on TRON and USDT on TON remain **inactive** until separately confirmed. Always compare the address with the maintainer's wallet before sending. Never send funds to addresses supplied by third parties or unsolicited messages.
 
 ## English
 
@@ -19,11 +19,25 @@ Voluntary contributions help with test hardware, development infrastructure, bui
 | --- | --- | --- |
 | USDT | TRON / TRC20 | 🔒 Awaiting verified receiving address |
 | USDT | TON | 🔒 Awaiting verified receiving address |
-| TON | TON | 🔒 Awaiting verified receiving address |
-| BTC | Bitcoin mainnet | 🔒 Awaiting verified receiving address |
+| TON | TON mainnet | ✅ Address below |
+| BTC | Bitcoin mainnet | ✅ Address below |
 | USDC | Solana | 🔒 Optional; not yet activated |
 
-When published, each receiving address will be displayed **in this repository** with an explicit network label, and preferably a matching QR code. Sending assets on the wrong chain may cause permanent loss. Cryptocurrency transfers generally cannot be reversed. Only donate using methods permitted in your jurisdiction.
+**Active direct-donation addresses (verify network before transfer):**
+
+**TON — TON mainnet, native TON only (not TRON/TRC20):**
+
+```text
+UQDoulTWDOELmwXnSGNISQR-kAXleUYIGJp-3KxpjfdjrUlf
+```
+
+**Bitcoin — Bitcoin mainnet (on-chain BTC only):**
+
+```text
+bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
+```
+
+USDT (TRC20 on TRON) and USDT on TON are not enabled here yet. Do not send USDT to the addresses above unless the corresponding token/network receiving support has been independently confirmed. Sending assets on the wrong chain may cause permanent loss. Cryptocurrency transfers generally cannot be reversed. Only donate using methods permitted in your jurisdiction.
 
 **Other ways to help:** Star the repository, share development updates, test safely, provide reproducible bug reports, or contribute documentation and code. Financial support is voluntary and provides no guaranteed builds, early access, or priority fixes.
 
@@ -36,7 +50,7 @@ When published, each receiving address will be displayed **in this repository** 
 Спасибо за поддержку **Salamanka TV 14** — независимого проекта по разработке Android TV 14 с **настоящей 64-битной ARM64-средой** для **MECOOL KM6 Deluxe Rev 1**.
 
 > [!IMPORTANT]
-> **Адреса для криптопожертвований пока не опубликованы.** Сейчас здесь нет действующих реквизитов. Не переводите средства на адреса из личных сообщений, от третьих лиц или в примерах.
+> **Адреса TON и Bitcoin опубликованы ниже.** Они считаны из QR-кодов кошелька владельца и проверены по формату и контрольной сумме. USDT в сетях TRON и TON пока не активирован. Перед переводом перепроверьте адрес в кошельке владельца. Не доверяйте адресам из личных сообщений.
 
 ### На что идут пожертвования
 
@@ -46,11 +60,25 @@ When published, each receiving address will be displayed **in this repository** 
 | --- | --- | --- |
 | USDT | TRON / TRC20 | 🔒 Ожидается проверенный адрес |
 | USDT | TON | 🔒 Ожидается проверенный адрес |
-| TON | TON | 🔒 Ожидается проверенный адрес |
-| BTC | Bitcoin mainnet | 🔒 Ожидается проверенный адрес |
+| TON | TON mainnet | ✅ Адрес ниже |
+| BTC | Bitcoin mainnet | ✅ Адрес ниже |
 | USDC | Solana | 🔒 Необязательно, пока не подключено |
 
-После активации официальные адреса будут размещены **непосредственно в этом репозитории**. Ошибка в выборе сети может привести к безвозвратной потере средств. Поддерживайте проект только законными в вашей стране способами.
+**Действующие адреса (внимательно проверьте сеть):**
+
+**TON — сеть TON mainnet, только TON:**
+
+```text
+UQDoulTWDOELmwXnSGNISQR-kAXleUYIGJp-3KxpjfdjrUlf
+```
+
+**Bitcoin — основная сеть Bitcoin, только BTC:**
+
+```text
+bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
+```
+
+**USDT TRC20 и USDT в сети TON пока не принимаются.** Ошибка в выборе сети может привести к безвозвратной потере средств. Поддерживайте проект только законными в вашей стране способами.
 
 Можно помочь и без денег: поставить звезду репозиторию, поделиться новостями, сообщить о воспроизводимых ошибках или улучшить документацию и код. Пожертвования не дают гарантий выпуска прошивки, раннего доступа или приоритетного исправления ошибок.
 
@@ -61,7 +89,7 @@ When published, each receiving address will be displayed **in this repository** 
 感谢您支持 **Salamanka TV 14**！这是一个面向 **MECOOL KM6 Deluxe Rev 1** 的独立固件研发项目，目标是实现真正的 **64 位 ARM64 Android TV 14** 系统。
 
 > [!IMPORTANT]
-> **目前尚未公布加密货币捐赠地址。** 本页暂时没有可用的收款地址。请勿向私信、第三方提供或示例中的地址转账。
+> **TON 和 Bitcoin 收款地址已公布如下。** 地址已从维护者钱包的二维码读取并通过格式及校验和验证。USDT（TRON / TON）暂未启用。转账前请再次与维护者的钱包地址核对，不要信任私信中的收款地址。
 
 ### 捐赠将用于什么？
 
@@ -71,11 +99,25 @@ When published, each receiving address will be displayed **in this repository** 
 | --- | --- | --- |
 | USDT | TRON / TRC20 | 🔒 等待已验证的收款地址 |
 | USDT | TON | 🔒 等待已验证的收款地址 |
-| TON | TON | 🔒 等待已验证的收款地址 |
-| BTC | Bitcoin 主网 | 🔒 等待已验证的收款地址 |
+| TON | TON 主网 | ✅ 地址见下方 |
+| BTC | Bitcoin 主网 | ✅ 地址见下方 |
 | USDC | Solana | 🔒 可选，尚未启用 |
 
-启用后，官方收款地址将直接发布在**此 GitHub 仓库**中，并明确标注对应网络。选择错误的网络可能导致资金永久丢失；加密货币转账通常不可撤销。请仅使用您所在地法律允许的方式支持项目。
+**当前启用的捐赠地址（转账前请核对网络）：**
+
+**TON — TON 主网，仅限原生 TON：**
+
+```text
+UQDoulTWDOELmwXnSGNISQR-kAXleUYIGJp-3KxpjfdjrUlf
+```
+
+**Bitcoin — Bitcoin 主网，仅限 BTC：**
+
+```text
+bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
+```
+
+**USDT（TRON TRC20 和 TON 网络）尚未启用。** 选择错误的网络可能导致资金永久丢失；加密货币转账通常不可撤销。请仅使用您所在地法律允许的方式支持项目。
 
 无需捐款也能支持：为项目点 Star、分享开发进展、提交可复现的错误报告，以及帮助改进代码和文档。捐赠完全自愿，不保证提供固件、提前使用权或优先修复。
 
@@ -84,7 +126,7 @@ When published, each receiving address will be displayed **in this repository** 
 ## Transparency / Прозрачность / 透明度
 
 - This is support for independent software development, **not a registered charity or a tax-deductible charitable contribution**.
-- Donation addresses will appear only after the maintainer has verified each asset and network.
+- TON and Bitcoin public receiving addresses were supplied by the maintainer and checksum-validated; additional currencies will appear only after separate network/asset confirmation.
 - Never share your wallet's seed phrase, private keys, or exchange login with the project or anyone claiming to represent it.
 - Funds are voluntary support, not payment for a particular feature or a promise of release.
 
