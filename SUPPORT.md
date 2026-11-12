@@ -25,7 +25,11 @@ Voluntary contributions help with test hardware, development infrastructure, bui
 
 **Active direct-donation addresses (verify network before transfer):**
 
+Scan a QR code or copy its address. Verify the full address and selected asset/network inside your wallet before confirming; codes encode only the receiving address, not a payment amount.
+
 **USDT (Tether) — TRON / TRC20 network ONLY:**
+
+![Scannable USDT TRC20 donation QR code](assets/donations/usdt-trc20.svg)
 
 ```text
 TCeavp6jZSwunV3HB5QuhC9dRvnaBygQeT
@@ -35,11 +39,15 @@ Select **USDT on TRON (TRC20)** in your wallet or exchange. Do **not** select ER
 
 **TON — TON mainnet, native TON only (not TRON/TRC20):**
 
+![Scannable TON donation QR code](assets/donations/ton.svg)
+
 ```text
 UQDoulTWDOELmwXnSGNISQR-kAXleUYIGJp-3KxpjfdjrUlf
 ```
 
 **Bitcoin — Bitcoin mainnet (on-chain BTC only):**
+
+![Scannable Bitcoin donation QR code](assets/donations/bitcoin.svg)
 
 ```text
 bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
@@ -76,6 +84,8 @@ bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
 
 **USDT (Tether) — только сеть TRON / TRC20:**
 
+![QR-код USDT TRC20 для пожертвований](assets/donations/usdt-trc20.svg)
+
 ```text
 TCeavp6jZSwunV3HB5QuhC9dRvnaBygQeT
 ```
@@ -84,11 +94,15 @@ TCeavp6jZSwunV3HB5QuhC9dRvnaBygQeT
 
 **TON — сеть TON mainnet, только TON:**
 
+![QR-код TON для пожертвований](assets/donations/ton.svg)
+
 ```text
 UQDoulTWDOELmwXnSGNISQR-kAXleUYIGJp-3KxpjfdjrUlf
 ```
 
 **Bitcoin — основная сеть Bitcoin, только BTC:**
+
+![QR-код Bitcoin для пожертвований](assets/donations/bitcoin.svg)
 
 ```text
 bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
@@ -123,6 +137,8 @@ bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
 
 **USDT（泰达币）— 仅限 TRON / TRC20 网络：**
 
+![USDT TRC20 捐赠二维码](assets/donations/usdt-trc20.svg)
+
 ```text
 TCeavp6jZSwunV3HB5QuhC9dRvnaBygQeT
 ```
@@ -131,11 +147,15 @@ TCeavp6jZSwunV3HB5QuhC9dRvnaBygQeT
 
 **TON — TON 主网，仅限原生 TON：**
 
+![TON 捐赠二维码](assets/donations/ton.svg)
+
 ```text
 UQDoulTWDOELmwXnSGNISQR-kAXleUYIGJp-3KxpjfdjrUlf
 ```
 
 **Bitcoin — Bitcoin 主网，仅限 BTC：**
+
+![Bitcoin 捐赠二维码](assets/donations/bitcoin.svg)
 
 ```text
 bc1q5zf4gm4udvwfhxy9nsydeujdj2kgulnyqkm2d4
