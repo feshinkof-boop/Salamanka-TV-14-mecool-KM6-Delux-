@@ -1,15 +1,13 @@
 ---
-name: Security or provenance concern
-about: Non-sensitive supply-chain concern; do not disclose active exploit details publicly
-title: "[SECURITY] "
-labels: ["security"]
-assignees: []
+name: Firmware provenance question
+about: Report a non-sensitive issue with a firmware component or binary
+title: "[security] "
 ---
 
-**Affected component / image:**
-
-**Source/commit/hash (public information only):**
+**Component, origin and version:**
 
 **Observed behavior:**
 
-**Evidence:** Sanitized only. For sensitive exploitation details use a private channel.
+**Reproduction/evidence (sanitized):**
+
+**Do not publish private exploitation details, signing keys, DRM or device-specific secrets here.** Request a private contact method for sensitive reports.

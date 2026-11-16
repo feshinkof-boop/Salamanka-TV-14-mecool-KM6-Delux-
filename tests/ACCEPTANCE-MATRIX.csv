@@ -1,13 +1,16 @@
-id,area,acceptance,required_evidence,status
-A01,architecture,ARM64-only running Android 14,adb props and linker/service audit,UNKNOWN
-A02,boot,repeatable cold boots and recovery,boot logs and rollback demonstration,UNKNOWN
-A03,graphics,accelerated Android composition,AIDL Composer3 and actual frames/trace,BLOCKED
-A04,video,HW AVC HEVC AV1 4K decode,MediaCodec identity + playback trace,UNKNOWN
-A05,audio,HDMI SPDIF analog output,receiver logs + PCM passthrough samples,UNKNOWN
-A06,network,gigabit ethernet + 2.4/5GHz WiFi,ip link + throughput + resume tests,UNKNOWN
-A07,remote,V01 mic and Bluetooth navigation,voice capture + HID event logs,UNKNOWN
-A08,display,SDR HDR10 AFR EDID CEC,mode logs and display observation,UNKNOWN
-A09,power,suspend/resume and no unintended wakes,overnight suspend event logs,UNKNOWN
-A10,storage,SD USB and eMMC reliability,filesystem stress and error logs,UNKNOWN
-A11,stability,72h multimedia network soak,crash thermal and memory reports,UNKNOWN
-A12,security,known IOC free full provenance and SELinux enforcing,SBOM static analysis network capture reset test,UNKNOWN
+id,subsystem,acceptance,status,evidence_or_gap
+A01,CPU and userspace,native ARM64 Android 14 init and framework on KM6,PHYSICAL_PARTIAL,init zygote64 system_server observed during RAM/NBD test
+A02,framework,sys.boot_completed and service startup,PHYSICAL_PARTIAL,Stage 52/53 boot_completed=1 with 219 Binder services
+A03,launcher,usable stable Leanback UI,BLOCKED,libhwui RenderThread abort during surface setup
+A04,display,DRM KMS and functional graphics,PHYSICAL_PARTIAL,1080p60 Panfrost Mesa Composer3 SurfaceFlinger activity
+A05,internal_storage,Linux 6.18 eMMC enumeration,BLOCKED,CMD3 timeout after CMD0 CMD1 CMD2
+A06,persistent_boot,standalone Android 14 using internal storage,NOT_TESTED,only RAM and NBD test boot confirmed
+A07,recovery,repeatable independent restore on board,PARTIAL,12 backups verified old Android 11 boots; full installation rollback unproven
+A08,video,actual hardware AVC HEVC AV1 playback,NOT_TESTED,MediaCodec and Codec2 VPU path not proven
+A09,audio,HDMI SPDIF analog sound and passthrough,NOT_TESTED,no Android 14 functional acceptance
+A10,remote,V01 HID buttons and voice microphone,NOT_TESTED,no Android 14 functional acceptance
+A11,wireless,WiFi Bluetooth and reconnection,NOT_TESTED,no Android 14 functional acceptance
+A12,network,normal Ethernet services and stability,PARTIAL,NBD transport used consumer network not qualified
+A13,power,standby wake and HDMI CEC,NOT_TESTED,no Android 14 functional acceptance
+A14,security,SELinux enforcing full provenance and safe update,BLOCKED,physical debug runs permissive
+A15,stability,24h and 72h media and input soak,NOT_TESTED,launcher crash prevents acceptance

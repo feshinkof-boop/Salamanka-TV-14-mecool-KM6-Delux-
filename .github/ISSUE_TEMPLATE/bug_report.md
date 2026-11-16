@@ -1,23 +1,23 @@
 ---
-name: KM6 hardware / firmware bug
-about: Report a reproducible defect with sanitized evidence
-title: "[BUG] "
-labels: ["bug"]
-assignees: []
+name: Hardware or firmware regression
+about: Reproducible issue on KM6 Deluxe Rev. 1
+title: "[KM6] "
 ---
 
-**Board revision:** KM6 Deluxe Rev 1 / other (specify)
+**Board revision:** KM6 Deluxe Rev. 1 / other (specify)
 
-**Firmware/build fingerprint:**
+**Running system:** Android 11 / Linux 6.18 RAM boot / Android 14 NBD / other
 
-**Observed behavior:**
+**Kernel and source revision:**
 
-**Expected behavior:**
+**Steps to reproduce:**
 
-**Reproduction steps:**
+**Expected:**
 
-**Evidence:** Include logs with MAC/IP/serial/account details removed.
+**Observed:**
 
-**Test status:** DEVICE-PASS / HOST-PASS / UNKNOWN
+**Logs or trace:** (sanitized; no private IP, serial, account or DRM data)
 
-**Recovery impact:** Describe without publishing secrets.
+**Recovery outcome:**
+
+**Test environment:** physical KM6 / workstation only
