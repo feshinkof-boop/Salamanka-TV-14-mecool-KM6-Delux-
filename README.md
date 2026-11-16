@@ -1,78 +1,52 @@
 # Salamanka TV 14
 
-### Independent Android TV 14 • Native ARM64 • MECOOL KM6 Deluxe Rev 1
+Android TV 14 for the **MECOOL KM6 Deluxe Rev. 1** (4/64 GB, Amlogic S905X4 / SC2-AH212).
 
-**Rebuilding the software foundation of an Amlogic S905X4 TV box—not just changing its launcher.** Salamanka TV 14 aims to turn aging but capable hardware into a modern Android TV and ARM64 development platform. The project combines AOSP, Linux kernel bring-up, graphics and media engineering, hardware debugging, and a security-first firmware design.
+The S905X4 is a 64-bit SoC, but the original KM6 Android environment was 32-bit. I started Salamanka to see how far the hardware can be taken with a native ARM64 Android 14 userspace and a newer Linux kernel, without turning it into a box that can no longer play video or use its original remote.
 
-> [!IMPORTANT]
-> **Experimental development — no public flashable firmware yet.** The physical KM6 has executed Android 14 and reached a natural `sys.boot_completed=1` in a temporary **RAM/host-backed NBD test environment**. This is **not** a verified persistent eMMC installation or a finished TV experience. Launcher rendering, internal eMMC support, media codecs, audio, connectivity and security gates still require work.
->
-> **Latest verified project report: 16 November 2026 · Stage 56.** [Progress and effort](docs/PROGRESS.md) · [Engineering status](docs/STATUS.md) · [Краткий статус на русском](docs/STATUS-RU.md)
+**Maintainer:** [@feshinkof-boop](https://github.com/feshinkof-boop)  
+**Development target:** genuine ARM64-only AOSP, not a modified slimBOX image.  
+**Release status:** **no installable firmware**.
 
-## The project in numbers
+## Latest state — 16 November 2026
 
-| Engineering effort reported through Stage 56 | Result |
-| --- | --- |
-| Documented engineering stages | **56** |
-| Cumulative automated/host test-suite checks reported passing | **450** |
-| Cumulative test-suite checks skipped | **3** |
-| Engineering assessment matrix | **230 PASS · 1 SKIP · 34 PARTIAL · 17 BLOCKED · 0 FAIL** |
-| Verified backup sets in latest recovery audit | **12 / 12** |
-| Binder services in the Android 14 boot experiment | **219** |
-| Physical TV box used for bring-up | **MECOOL KM6 Deluxe Rev 1** |
+Android 14 is running on the physical KM6 through a temporary RAM boot with system images served by the development computer over NBD. It reaches a natural `sys.boot_completed=1` and has run `zygote64`, `system_server`, SystemUI and Leanback HOME. The later boot experiment reported **219 Binder services**.
 
-These are **maintainer-reported results from the local development environment**, not GitHub Actions metrics. The 450 figure is a **cumulative full-suite total**, not 450 different device validations. **0 FAIL in the assessment matrix does not mean the project is complete:** 34 items remain partial and 17 blocked. Complete local test reports and source changes have not yet been imported into this public repository.
+That does **not** mean the TV interface is usable. Leanback currently hits a `libhwui` RenderThread abort. Linux 6.18.55 also cannot enumerate the internal eMMC: CMD0–CMD2 complete but CMD3 times out. These are the two immediate investigations.
 
-## What has actually been achieved
+| Area | Known result | Open issue |
+| --- | --- | --- |
+| Android 14 / ARM64 | Physical `init`, Zygote, framework and boot-complete | Release configuration, stability |
+| Display/GPU | Panfrost/Mesa, HDMI DRM/KMS 1080p60, Composer3/SurfaceFlinger exercised | HWUI launcher crash |
+| Internal eMMC | MMC initialization begins | CMD3 response timeout |
+| Media, audio and remote | Hardware capability exists on stock device | Android 14 HAL/driver tests still needed |
+| Recovery | Existing Android 11 still boots; 12 backup sets verified | Independent Android 14 install/rollback not tested |
 
-- **AOSP Android 14 / 64-bit build:** system and related images generated; multiple compiler, SELinux, partition, VINTF and framework integration issues investigated.
-- **Linux 6.18.55 on real S905X4 hardware:** native AArch64 kernel and early userspace reached through controlled temporary boots.
-- **Real Android 14 execution:** `/init`, `zygote64`, `system_server` and a growing Android service stack started on the KM6.
-- **Graphics progress:** Mali-G31/Panfrost with Mesa EGL/GLES, HDMI **1920×1080 @ 60 Hz**, DRM/KMS, AIDL Composer3 and SurfaceFlinger integration observed in physical experiments. GPU activity and boot-animation-related rendering were recorded in logs; a stable, visually confirmed finished interface is still outstanding.
-- **Android boot milestone:** two reported temporary image boots reached `sys.boot_completed=1`; the later run took **94.52 seconds**, showed **219 Binder services**, and brought SystemUI and the Leanback HOME activity up. A `libhwui` RenderThread crash still prevents claiming a working launcher.
-- **Repeatable recovery work:** 12 backup sets verified in the latest audit; the pre-existing Android 11 installation still boots. Recent eMMC/bootloader/GPT/other persistent partitions were not modified during the Stage 54–56 tests.
+[Exact status](docs/STATUS.md) · [Bring-up history](docs/BRINGUP.md) · [eMMC notes](docs/EMMC.md) · [Graphics notes](docs/GRAPHICS.md)
 
-The recent Android test environment uses an image served from the Kubuntu development computer through **NBD**, rather than the KM6's internal eMMC. This is a major physical bring-up result, but not a release candidate.
+## The work
 
-## What is still blocking a release
+The port started with an audit of the bootloader, partition layout and device trees. That led to AOSP product builds, Linux 6.18.55 bring-up, Android `init` and framework debugging, Panfrost/DRM integration, and finally physical Android test boots over NBD. The current problems are specific, reproducible failures rather than a missing Android build.
 
-**Native storage:** the modern-kernel eMMC controller progresses through early initialization but currently times out at **CMD3 (SET_RELATIVE_ADDR)**; local Android storage is not usable. **UI stability:** Leanback's RenderThread can abort during graphics-surface setup. **Media and peripherals:** hardware AVC/HEVC/AV1 decode, HDMI/SPDIF/analog audio, V01 microphone remote, Wi-Fi/Bluetooth, suspend/wake and long-term stability still require real-device validation. **Security:** SELinux enforcing and independent review of every imported proprietary component remain release requirements.
+The development has reached **Stage 56** locally. The latest reported checkpoint is **`2e06096`** (a local commit, not a commit in this GitHub repo). See the [dated lab record](docs/BRINGUP.md) and [test notes](docs/TESTING.md); a stage count is not a completion percentage.
 
-There is no percentage-complete claim or release date: compiling, booting, drawing frames and shipping a stable ROM are different milestones.
+## What is here
 
-## Why ARM64, and why this hardware?
+This repository contains technical notes, older sanitized board investigations, community/security references, and a [read-only ROM inventory tool](tools/rom_audit.py) with synthetic tests.
 
-The KM6 Deluxe's quad Cortex-A55 S905X4 is a **64-bit** SoC, with 4 GB RAM, 64 GB eMMC, Gigabit Ethernet, Wi-Fi and a hardware AV1-capable VPU. Original factory firmware used a 32-bit Android userspace despite the 64-bit CPU. The project's requirement is **genuine native ARM64 Android userspace**, not a 32-bit ROM with a 64-bit kernel. This expands compatibility with applications and ARM64 Linux tooling, but does **not** guarantee more speed, Widevine L1, Google certification or working codecs without driver integration.
+**The active AOSP checkout, modified kernel, device/HAL sources, build images and full on-device logs have not yet been mirrored here.** Those remain on the local development machine. This repository is not currently a reproducible build or a firmware download.
 
-The broader vision is a versatile ARM computer with excellent TV capabilities. Planned components include a Media Engine (HDR/AFR/decoder diagnostics), Remote Manager (V01 voice and HID), Power Manager, Performance Manager, optional Network Suite and Linux ARM64 experiments. **These are goals, not already shipped features.** See [features](docs/FEATURES.md).
+Technical notes:
+- [System design](docs/ARCHITECTURE.md) · [Build](docs/BUILD.md) · [Hardware matrix](docs/HARDWARE.md)
+- [Recovery](docs/RECOVERY.md) · [Roadmap](docs/ROADMAP.md) · [Release checks](docs/RELEASE-CRITERIA.md)
+- [XCPE supply-chain research](security/XCPE-VIDEOSTRONG.md) · [4PDA findings](research/4PDA-COMMUNITY.md)
 
-## Development beyond a typical firmware modification
+[Русский статус](docs/STATUS-RU.md) · [Open issues](https://github.com/feshinkof-boop/Salamanka-TV-14-mecool-KM6-Delux-/issues)
 
-Several weeks of work have gone into boot-chain and DTB analysis, board-specific ARM64 kernel configuration, AOSP image building, service-policy debugging, GPU/compositor bring-up, host-driven NBD boot infrastructure, repeated hardware tests, eMMC timing/command forensics, recoverability and the Videostrong/XCPE supply-chain investigation.
+## Help and support
 
-**The challenge is to preserve real hardware function while replacing the underlying OS—not to make a screenshot of a newer Android version.** [Read the project history and evidence boundaries →](docs/PROGRESS.md)
+Testing advice and patches are welcome, especially for SC2 MMC initialization, Android graphics, Amlogic audio/VPU, V01 voice input and safe recovery. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before sharing logs or binaries.
 
-## Project resources
+[Support the project](SUPPORT.md) (English / Русский / 中文). Support is voluntary and does not promise a release.
 
-- **[Current engineering status](docs/STATUS.md)** — confirmed milestones, immediate blockers and what is not verified.
-- **[Engineering history and effort](docs/PROGRESS.md)** — the work behind the milestone numbers.
-- **[Russian status / Статус на русском](docs/STATUS-RU.md)** — short community-facing update.
-- **[Roadmap](docs/ROADMAP.md)** · **[Release criteria](docs/RELEASE-CRITERIA.md)** · **[Hardware matrix](docs/HARDWARE.md)**.
-- **[XCPE/Videostrong research](security/XCPE-VIDEOSTRONG.md)** · **[Security policy](SECURITY.md)**.
-- **[Host-side ROM audit utility](tools/rom_audit.py)** and [synthetic tests](tests/test_rom_audit.py); these inspect files, **not** the KM6's current security state.
-- **[Open engineering issues](https://github.com/feshinkof-boop/Salamanka-TV-14-mecool-KM6-Delux-/issues)** · **[Contributing](CONTRIBUTING.md)**.
-- **[4PDA KM6 Deluxe discussion](https://4pda.to/forum/index.php?showtopic=1007166)**.
-
-## Public-source boundary
-
-The **real, evolving AOSP tree, kernel modifications, runtime logs and large build products live on the local Kubuntu development workstation**; they are not all hosted in this GitHub repository. Public documentation summarizes the development reports available as of the stated date, and host-tool tests in GitHub Actions are independent of physical-device validation. Never flash the device based solely on a project-status claim; do not share TEE/DRM secrets, per-device identifiers or private recovery images.
-
-## Support development / Поддержать проект / 支持开发
-
-**[❤️ Support Salamanka TV 14 — English · Русский · 简体中文](SUPPORT.md)**
-
-Voluntary contributions can help fund test hardware, driver research and development infrastructure. Verified public receiving addresses for **USDT on TRON/TRC20**, **TON** and **Bitcoin mainnet** are listed in [SUPPORT.md](SUPPORT.md). **USDT on TON is not enabled.** Contributions do not imply a release, early access or a guaranteed outcome.
-
-## Licensing
-
-No blanket license has been selected by the owner. See [project governance](docs/PROJECT-GOVERNANCE.md); AOSP, Linux and third-party components remain governed by their respective licenses.
+This is an independent project, not affiliated with MECOOL, Amlogic or slimBOXtv.
