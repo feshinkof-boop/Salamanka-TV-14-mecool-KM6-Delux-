@@ -1,23 +1,26 @@
-# Build & artifact provenance
+# Build and physical bring-up provenance — November 2026
 
-The available project record reports local AOSP Android TV 14 builds on Kubuntu using an ARM64 S905X4 device configuration with Linux 6.18.55 development.
+This project targets independent **AOSP Android TV 14 / native ARM64** on MECOOL KM6 Deluxe Rev1 (Amlogic S905X4/SC2), using a mainline-oriented **Linux 6.18.55** kernel baseline.
 
-## Reported build milestones
+## From compilation to physical Android
 
-- Android 14 AOSP sync completed; device lunch available.
-- Soong/Kati configuration succeeded after memory/swap and build parallelism tuning.
-- Duplicate SELinux `km6_gpu_device`, VINTF sepolicy inconsistency and DMA-BUF naming issues were addressed in subsequent attempts.
-- Build products reported: `system.img`, `system_ext.img`, `vendor.img`, `product.img`, `odm.img`, `super.img`, `vbmeta_system.img`.
-- Host-side validation of partition structure, ext4 and ARM64 binaries reported successful.
-- **Compiler success is not an Android 14 hardware boot.**
+1. AOSP sources synced and an S905X4-targeted product configured; Soong/Kati and an ARM64 kernel compiled.
+2. Android images reported built locally: `system.img`, `system_ext.img`, `vendor.img`, `product.img`, `odm.img`, `super.img`, `vbmeta_system.img`. Original public image hashes and exact source revisions have not been provided here.
+3. Compiler and image integration obstacles involved SELinux types, FCM/VINTF declarations, DMA-BUF and graphics HAL/device labels. See [FCM analysis](FCM-ANALYSIS.md) for the distinction between Android 14 FCM 8 and Android 15 level 202404.
+4. Physical RAM boot experiments ran an AArch64 Android `init`, then `zygote64`, `system_server` and associated Binder services. GPU/HDMI progressed to DRM/KMS 1080p60 and AIDL Composer3/SurfaceFlinger.
+5. Temporary **NBD-backed** Android boots on real hardware then reported natural `sys.boot_completed=1`. One Stage 53 run reported **94.52s**, **219 Binder services**, SystemUI and Leanback HOME activity before a launcher RenderThread SIGABRT.
+6. Independent storage bring-up found a reproducible early eMMC MMC-command failure at **CMD3**, after CMD0/1/2 succeeded. Local eMMC remains inaccessible to the modern kernel; no persistent Android 14 device installation is claimed.
 
-The exact `repo` manifest revisions, device source tree, kernel config and build logs were not accessible through this conversation's GitHub connection. Reproduce build instructions from the actual local checkout and link commit IDs in a later update; do not fabricate source or shell commands that assume unverified paths.
+## What the public repository contains
 
-## Before publishing binaries
+Engineering status, milestones, historical sanitized bootloader/DTB analysis, XCPE research, acceptance plans, Python host-only ROM inspection and its synthetic GitHub Actions tests. The evolving kernel patches, full AOSP checkout, firmware images, NBD staging assets, build logs and physical device backup sets remain on the local development workstation—not automatically published here.
 
-1. Publish relevant source and exact revisions, including manufacturer-blobs inventory and redistribution rights.
-2. Keep Google/TEE/Widevine proprietary keys, tokens, unique calibration/identity records and private device backups out of Git.
-3. Produce a versioned SHA-256 manifest and signed, build-specific metadata.
-4. Verify `lunch`, Soong, VINTF, SELinux, ARM64-only HALs, AVB and image compatibility.
-5. Complete recovery test and first device boot in controlled conditions.
-6. Only then create a GitHub release.
+## Before sharing images or claiming a reproducible build
+
+- Import the **actual, licensed** project source and pinned upstream revision manifests—not synthesized replacements.
+- Publish sanitized original build evidence and image SHA-256 digests, partition layouts and compatibility results.
+- Verify Linux eMMC access and preserve the known-good Android 11/recovery environment.
+- Verify all ARM64-only userspace services, image startup, display, Codec2 hardware decode, audio, radio/remote support, SELinux enforcing and long-term stability.
+- Pass signed/verified OTA and rollback gates with explicit approval before any dangerous device write.
+
+**AOSP built, Android physically booted over NBD, but native storage and release validation remain unfinished.** [Full status](STATUS.md).

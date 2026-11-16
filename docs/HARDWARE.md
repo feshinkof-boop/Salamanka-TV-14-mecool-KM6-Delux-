@@ -14,7 +14,7 @@
 | SPDIF | Optical | Stock feature; some port regressions | PCM and supported passthrough receiver tests |
 | Analog audio | 3.5 mm | Stock feature | Audio routing and playback without dropouts |
 | USB | USB2 + USB3 | Host works; USB gadget ADB failed in Oct audit | Host disks/input and separate USB device-mode diagnosis |
-| SD slot | Removable media | Present | Mount/read/write test |
+| microSD slot | Hardware feature | Present | Not a dependency: no microSD media available and no SD-based bring-up/recovery requirement |
 | Remote | MECOOL V01 original | Voice generally available on stock | Voice search and input stable across boot/standby |
 
 **Do not merge KM6 Classic, KM6 Deluxe Rev 1 and later HDMI-marked Rev 2 results.** Hardware revisions may differ in LAN/BT/WLAN wiring. The 'HDMI' chassis marking is a community shorthand, not a substitute for board/SKU, DTB and peripheral identification.
@@ -24,7 +24,7 @@
 - 2160p H.264, HEVC Main/Main10, AV1, VP9 (as available); test supported profiles only.
 - SDR/HDR10 and 23.976/24/25/50/59.94/60fps content.
 - Lossless PCM stereo, AC3 5.1 optical/receiver path, HDMI multichannel where hardware supports.
-- Repeat 2h seek/pause/resume, 24h soak and 72h soak with activity logs.
+- Repeat 2h seek/pause/resume, 24h soak and 72h soak with activity logs after native storage, graphics and decoder gates pass.
 - Compare MediaCodec to software decode; log actual decoder names and dropped frames.
 
 ## Root cause discipline

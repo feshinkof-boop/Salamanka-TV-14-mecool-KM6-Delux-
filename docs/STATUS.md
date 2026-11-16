@@ -1,38 +1,73 @@
-# Engineering status — 2026-11-12
+# Salamanka TV 14 — current engineering status
 
-**Legend:** DEVICE-PASS (tested on hardware); HOST-PASS (validated offline); BUILT (compiled, no runtime proof); BLOCKED; UNKNOWN; PLANNED.
+**Updated: 16 November 2026 • Latest maintainer report: Stage 56 • Target: MECOOL KM6 Deluxe Rev 1 (Amlogic S905X4 / SC2 / AH212)**
 
-## Chronology
+> [!IMPORTANT]
+> **Working physical Android 14 boot path demonstrated; production firmware NOT ready.** Android 14 has reached `sys.boot_completed=1` on the physical KM6 using temporary RAM boot and host-backed NBD storage. This is not an Android 14 installation on the internal eMMC, and no stable end-user TV interface has been demonstrated.
 
-- **2020 factory firmware:** Android TV 10, stock V4.20201026, 32-bit Android userspace. Originally had a working Widevine L1 path according to archived device evidence.
-- **2026-10-20:** slimBOXtv ATV 11 installed. Later audit identified build **11.46** and kernel **5.4.125**. Root via Magisk 30.7, SELinux permissive, A/B slot `_a`; network-only ADB, Termux SSH. Earlier stock bootloader replaced by slimBOX bootloader. Widevine L1 lost, L3 protected playback proven working.
-- **2026-10-25/26:** offline bootloader/DTB and startup investigations completed; **29/29 audit checks passed**. No persistent bootloader/env/logo/TEE/DTB write was performed during that audit. See `research/archived/`.
-- **2026-11-02/03:** AOSP Android 14 and 64-bit kernel development progressed. Local sources synced, product lunch and Soong/Kati configuration passed. A previous build hit duplicate `km6_gpu_device` SELinux type / VINTF policy version inconsistencies and DMA-BUF heap naming, which were addressed in reported build iterations.
-- **2026-11-03:** AOSP image builds reported success: `system.img`, `system_ext.img`, `vendor.img`, `product.img`, `odm.img`, `super.img`, `vbmeta_system.img`. Host checks reported a consistent dynamic partition structure, ELF64/AArch64 binaries and AVB test-key structure.
-- **2026-11-11/12:** independent 4PDA and XCPE research incorporated; release security requirements elevated to P0.
+## At a glance
 
-**Correction (Nov 12):** Android 14 corresponds to FCM **8**; FCM **202404** is Android 15. The build's reported checkvintf failure at 202404 with declared HIDL Composer 2.4 requires inspection of the **actual** matrices and declarations. It is not proof AIDL Composer3 is universally mandatory for Android 14. [Investigation](FCM-ANALYSIS.md). Compositor runtime remains untested.
+| Subsystem | Latest evidence-based position |
+| --- | --- |
+| AOSP Android TV 14, native ARM64 | **Built; executed on physical hardware** with 64-bit Android services. Full final architecture audit for every HAL not published. |
+| Linux 6.18.55 kernel | **Physical bring-up achieved.** Mainline-oriented driver/DTB integration ongoing. |
+| Core Android boot | **Milestone reached in RAM/NBD tests:** natural `sys.boot_completed=1`; 219 Binder services reported; SystemUI and Leanback HOME resumed. |
+| GPU and display | **Physical progress:** Mali-G31/Panfrost, Mesa EGL/GLES, HDMI 1080p60, DRM/KMS, AIDL Composer3 and SurfaceFlinger. Stable visible home screen **not verified**. |
+| Launcher and UI | **Partial:** Leanback activity resumes; `libhwui CanvasContext::setupPipelineSurface` / RenderThread SIGABRT observed. |
+| Local eMMC under modern kernel | **Blocked:** CMD0–CMD2 succeed; CMD3 SET_RELATIVE_ADDR times out. No `/dev/mmcblk*` enumeration or native super access. |
+| Temporary test storage | **Demonstrated:** host-served NBD backing Android images; NOT a standalone persistent installation. |
+| Existing Android 11 / recovery | **Verified operational in latest audit:** 12/12 backups checked; installed Android 11 retained. |
+| SELinux | **Not release-ready:** physical tests permissive; enforcing is an outstanding requirement. |
+| Video hardware codecs | **Unverified:** native Android 14 MediaCodec/Codec2 hardware AVC/HEVC/AV1 path. |
+| Audio, radios, voice remote and power | **Unverified or incomplete:** HDMI, optical SPDIF, analog, gigabit LAN beyond test transport, Wi-Fi, BT/V01 mic, suspend/CEC. |
+| XCPE supply-chain security | **Research and tooling started, full provenance unverified.** No claim that this exact Rev1 box is infected. |
+| Release | **Not available. Do not flash.** |
 
-## Device-verified historic findings (from Oct 26 report)
+## Development effort — numbers with context
 
-- slimBOX 11.46 Android 11 boots, rooted and network reachable.
-- Kernel 5.4.125, A/B partitions, active DTB `sc2_s905x4_ah212-4g`.
-- Loaded DTB's USB `controller-type=0x03` means the proposed `_aml_dtb` store-only edit did **not** change the live DTB; no USB ADB gadget attachment was demonstrated.
-- Widevine **L3 CDM provisioned and license/protected playback succeeded** (Media3/ExoPlayer; first frame 1,958ms; >60s). L1 provisioning failed with `keybox error 25` / `Bad Level 1 Root of Trust`, despite stock firmware historically exhibiting L1. A solution is **not** demonstrated.
-- Embedded U-Boot multi-DTB source in BL33 determined by offline analysis. See archived report; do not infer the same bootloader is still installed without rechecking.
+| Measure | Reported total | Meaning |
+| --- | ---: | --- |
+| Engineering stages | **56** | Staged investigation, changes, audits and repeated bring-up work; **not** 56 releases or a completion percentage. |
+| Test-suite passes | **450** | Cumulative passing test checks in the latest reported full suite; not 450 distinct physical validations. |
+| Test-suite skips | **3** | Cumulative skipped checks. |
+| Technical assessment | **230 PASS / 1 SKIP / 34 PARTIAL / 17 BLOCKED / 0 FAIL** | A separate status/acceptance matrix; **17 blockers still exist**. |
+| Backup verification | **12/12** | Verified backup sets in the latest recovery audit; does not imply every restoration scenario is proven. |
+| Android Binder services | **219** | Observed in a reported boot; count is not a complete health/compatibility test. |
+| Latest reported Android boot time | **94.52 s** | Temporary NBD-backed test boot, not a production startup benchmark. |
 
-## Not yet established
+**Source of the numbers:** maintainer-shared OpenCode/local engineering reports through Stage 56, dated 16 November 2026. Full raw logs and source revisions are not yet in this public GitHub checkout. GitHub Actions tests for the small offline audit utility are **not** the 450 figure. These measures must not be added together or treated as independent test counts.
 
-- A bootable, stable Salamanka Android 14 on physical KM6.
-- Working Android 14 native hardware acceleration for AV1/HEVC.
-- HDMI/SPDIF/analog audio on 6.18-based Android build.
-- Original remote V01 voice input.
-- Network and wake behavior on Android 14.
-- Preservation of Google certification / Widevine level.
-- Whether the user's own device, stock images or imported blobs contain XCPE.
+## Development timeline
 
-## Files currently NOT included in this public repository
+**October — understanding and preserving the hardware.** Identified KM6 Deluxe Rev1's boot chain, A/B partition layout, embedded U-Boot multi-DTB selection, USB-gadget limitations and recovery constraints. Investigated the legacy firmware, root and Widevine behavior; archived audit previously recorded 29/29 checks. Work also included native ARM64 Linux exploration and access tooling.
 
-The huge AOSP checkout, compiled images, kernel source fork, proprietary blobs, offline benchmark logs, and original backup/restore images remain on the local Kubuntu development workstation and were not made available to this connected GitHub session. **No source code, binary firmware, benchmark output or flashing artifact has been fabricated.**
+**Early November — building the new operating system.** Synced/configured Android 14 AOSP, brought up a device product and cross-compiled system/vendor/product/ODM/dynamic-super artifacts. Built Linux 6.18.55 for ARM64; investigated SELinux policy collisions, VINTF matrix issues, DMA-BUF naming and composer compatibility. Compilation alone did not constitute a boot.
 
-The next trusted update should commit real locally available source and test evidence with SHA-256 manifest, license review and secret scanning.
+**November 12–14 — hardware Android bring-up.** Temporary ADNL/RAM boots on KM6 reached Android's ARM64 init and then progressed through `zygote64` and `system_server`. The physical graphics path progressed through Panfrost and Mesa EGL/GLES to HDMI 1920×1080@60, AIDL Composer3, SurfaceFlinger and DRM atomic commits. Rendering activity was captured in logs, without declaring a stable user-visible launcher.
+
+**November 15–16 — operating system and storage investigation.** Progressed from earlier Android service restarts and netd/routing/NBD stalls to a natural `sys.boot_completed=1` using images served over the network from the Kubuntu workstation. Stage 52 reported **101.70 seconds** to completion and **219 Binder services**; Stage 53 reported **94.52 seconds**, SystemUI/app activity and Leanback HOME resumed. A RenderThread SIGABRT during graphics-surface setup remains. **These are physical KM6 tests with temporary host-served storage, not an eMMC-installed ROM.**
+
+**Stages 54–56 — safer native-storage diagnosis.** Verified **12/12** backup sets and demonstrated return to the existing Android 11 installation. A corrected test DTB moved modern-kernel eMMC initialization past an earlier `-EINVAL` error, but it still failed later. Stage 55 observed low-speed initialization and successful CMD0/CMD1/CMD2. Stage 56 localized repeatable failure to **CMD3 SET_RELATIVE_ADDR (RCA 0x0001 at 400 kHz)**, with response-timeout status `0xa1ff2800`. Device storage is **not enumerated**, so local super/system cannot be read or installed through this kernel path. Card-versus-controller root cause remains unproven. **No persistent bootloader, environment, GPT, eMMC or separate Arch installation writes were made during the Stage 54–56 diagnostics.**
+
+## Immediate technical priorities
+
+1. Diagnose **CMD3 eMMC initialization timeout** with controlled read-only traces and board-specific DTB/controller evidence; do not guess at partition writes.
+2. Investigate the **Android launcher RenderThread graphics-surface abort** and demonstrate a stable, human-visible UI.
+3. Move from **temporary NBD-based experiments** to a recoverable native storage solution only after explicit safety gates.
+4. Complete SELinux enforcing and reconcile Android 14 manifests/Composer/allocator policy with the running build.
+5. Bring up real 4K hardware video decoding, HDMI/SPDIF/analog audio, V01 voice, Wi-Fi/Bluetooth, power management and sustained stability.
+6. Audit origin, licensing, privileges and network behavior of all shipped components; produce device-specific acceptance evidence.
+
+## Evidence labels and important limitations
+
+- **PHYSICAL / RAM-NBD:** observed on real Rev1 hardware while a host supplies system data. Does **not** imply standalone eMMC boot.
+- **HOST-BUILT / HOST-TESTED:** compilation or verification on Kubuntu. Does **not** imply working hardware.
+- **RECOVERY-VERIFIED:** stated backed-up assets and the existing Android 11 recovery outcome; not a universal unbrick guarantee.
+- **PLANNED:** features still dependent on implementation and release testing.
+- **COMMUNITY REPORTED:** 4PDA observations, not independently reproduced.
+
+Historically, slimBOX 11.46 provided Widevine L3 playback where earlier stock had supported L1; **nothing here promises Widevine L1, licensed Google services, or Netflix certification**. XCPE research does not prove this exact Rev1 unit infected.
+
+**Do not publish a flashable image or instructions implying production readiness.** The full evolving local AOSP/kernel worktree, build outputs, sensitive device backups and detailed bring-up logs are not automatically available in this public GitHub repository.
+
+See also [engineering effort](PROGRESS.md) · [release criteria](RELEASE-CRITERIA.md) · [roadmap](ROADMAP.md) · [security](../security/XCPE-VIDEOSTRONG.md).

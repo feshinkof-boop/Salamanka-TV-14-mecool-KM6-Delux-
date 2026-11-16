@@ -1,42 +1,41 @@
-# Prioritized engineering roadmap
+# Engineering roadmap — updated 16 November 2026
 
-A project requirement is not a confirmed shipped feature. Every task is tracked as BUILT, HOST-PASS, DEVICE-PASS, BLOCKED or UNKNOWN.
+Salamanka TV 14 has progressed from offline image builds to **physical ARM64 Android 14 execution and temporary RAM/NBD boots reaching `sys.boot_completed=1`**. This does not establish persistent storage, a stable launcher or full hardware support.
 
-## P0 — release blockers
+## P0: release blockers
 
-| ID | Required outcome | Verification |
-|---|---|---|
-| P0-01 | Inventory/Audit stock, slimBOX and imported binary dependencies for XCPE, suspicious services and network access | SBOM + hashes + partitions + offline IOC results |
-| P0-02 | Real ARM64-only Android 14 boot | Device properties, running service architecture, screenshot + dmesg |
-| P0-03 | Recoverable image strategy and boot chain | Offline proofs, separate owner-approved recovery tests |
-| P0-04 | Identify FCM 202404 vs Android 14 FCM 8 configuration issue; resolve manifest/HAL compatibility and verify working composition | VINTF check passes and compositor runs on hardware |
-| P0-05 | Real accelerated playback H264/HEVC/AV1 | Decoder identity, CPU and frame-drop data on 4K samples |
-| P0-06 | HDMI, SPDIF, analog audio | Device/receiver tests, pause/resume, audio sync |
-| P0-07 | V01 remote microphone + navigation | HID/mic input through supported speech service |
-| P0-08 | 1GbE, Wi-Fi, Bluetooth | Reconnect, sleep, link, throughput and stability |
-| P0-09 | SELinux enforcing + minimal privilege | `getenforce`, policy audit, no broad permissive grants |
-| P0-10 | No unexpected reboot, freeze or blocked playback | Reproducible soak logs |
+| Priority | Required result | Current state |
+| --- | --- | --- |
+| **P0-01: Internal eMMC** | Reliable storage enumeration and native Android system/data access on KM6 Rev1 | **BLOCKED:** CMD0/1/2 pass; CMD3 times out (Stage 56). Do not guess or write partitions. |
+| **P0-02: Android UI** | Stable boot, launcher rendering, navigation and clean restart/shutdown | **PARTIAL:** boot_complete, 219 Binder, SystemUI/Leanback activity; RenderThread abort and visible display acceptance remain. |
+| **P0-03: Safe recovery/OTA** | Verified backups, clean A/B lifecycle, reproducible native recovery on exact revision | **PARTIAL:** 12/12 backups checked and existing Android 11 works; complete release recovery not proven. |
+| **P0-04: Framework/Composer** | Valid Android 14 FCM/VINTF/64-bit services, functioning HWUI/SurfaceFlinger | **PARTIAL:** AIDL Composer3 and GPU/DRM path progressed on hardware; full UI not stable. |
+| **P0-05: Hardware VPU** | Actual AVC/HEVC/AV1 4K decode via Android MediaCodec/Codec2 | **UNVERIFIED** |
+| **P0-06: Audio** | HDMI, optical SPDIF, analog audio, sync and supported passthrough | **UNVERIFIED** |
+| **P0-07: Remote and radios** | V01 microphone, input, Wi-Fi, Bluetooth, reliable wake | **UNVERIFIED** |
+| **P0-08: Networking and power** | Normal Ethernet, sleep/wake, DHCP, HDMI-CEC, sustained transfers | **PARTIAL:** NBD transport demonstrably used, general consumer connectivity not validated |
+| **P0-09: Release security** | SELinux enforcing, component provenance/SBOM, XCPE review, secure OTA and permissions | **BLOCKED:** temporary tests permissive; full audit still required |
+| **P0-10: Sustained reliability** | No fatal UI/system crashes in multi-day use | **BLOCKED:** launcher RenderThread SIGABRT |
 
-## P1 — quality
+### Recommended engineering order
 
-- P1-01 display: HDR10/SDR, AFR matching, EDID, HDMI-CEC.
-- P1-02 Bluetooth: key debounce, repeat, pairing, reconnect, wake and accidental wakes.
-- P1-03 storage: eMMC and removable USB/SD health, filesystem and large-file handling.
-- P1-04 power: sleep/network standby/deep standby semantics, fast wake.
-- P1-05 security updates: signed OTA/AVB on supported hardware, rollback tested.
-- P1-06 media stability: suspend/resume, app transitions, audio/video sync and problematic formats.
-- P1-07 privacy: permission-safe voice search, no hidden telemetry.
+1. **Trace eMMC CMD3 at low speed using reversible, owner-approved diagnostics** and distinguish protocol/card state from controller/DTB issues; do not modify persistent storage.
+2. **Reproduce and resolve HWUI/Leanback RenderThread abort**, capture actual on-screen result and cold-boot stability.
+3. Complete proper Linux MMC storage bring-up, native partition read/write safety planning and recovery proving *before* any firmware deployment.
+4. Restore strict SELinux/permissions, verify ARM64-only processes and valid HAL/VINTF declarations.
+5. Reintroduce and test media hardware decoder, all audio paths, radio/remote/standby and HDMI features on the real board.
+6. Finalize repeatable build evidence, binary provenance, security review and owner-approved safe release artifacts.
 
-## P2 — distinctive features
+## P1: end-user quality
 
-- Salamanka Media Engine: content display matching, HDR/saturation options, playback diagnostics.
-- Salamanka Remote Manager: mapping, event trace, original/newer remote profiles.
-- Salamanka Power Manager: explicit states, CEC and wake controls.
-- Salamanka Performance Manager: 4 GB RAM tuning, storage and thermal metrics.
-- Salamanka Network Suite: optional SSH/SFTP, SMB/NFS, VPN, local servers, **off by default**.
-- TV-oriented split screen/PiP, launcher and background-service support.
-- Branded boot logo/animation only after boot safety established.
+- AFR/HDR10/SDR, EDID, HDMI-CEC, audio-video synchronization and multi-receiver testing.
+- Remote V01/V03 reliability, voice input, key mapping and standby behavior.
+- Ethernet/Wi-Fi/Bluetooth throughput and reconnection; safe network services off by default.
+- USB host and permitted storage accessories; **no microSD card is required or planned for the bring-up/recovery path**.
+- Signed updates, user-mode security defaults, explicit privacy controls, multi-day soak tests.
 
-## Rules
+## P2: optional capabilities, not release guarantees
 
-No P2 completion can compensate for a P0 failure. Do not claim device-level PASS from unit tests. Never replace a working feature with an attractive but unverified port.
+Salamanka Media Engine, Remote Manager, Power Manager, Performance Manager, optional Network Suite, Android TV customization, Linux ARM64 experimentation and custom branding.
+
+**No P2 feature cancels a P0 blocker.** See [full status](STATUS.md), [effort](PROGRESS.md) and [release gates](RELEASE-CRITERIA.md).

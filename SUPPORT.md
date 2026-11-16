@@ -4,6 +4,8 @@
 
 Thank you for supporting **Salamanka TV 14**, an independent Android TV 14 / native ARM64 firmware engineering project for the **MECOOL KM6 Deluxe Rev 1**.
 
+**Current work (16 November 2026):** 56 engineering stages, 450 cumulative test-suite passes, and real Android 14 boot-complete achieved on the KM6 through a temporary RAM/NBD setup. A permanent, stable firmware is **not ready**. [Read the development effort](docs/PROGRESS.md) and [current status](docs/STATUS.md).
+
 > [!IMPORTANT]
 > **USDT on TRON/TRC20, native TON, and Bitcoin receiving addresses are published below.** The maintainer supplied Trust Wallet receive-screen addresses, with address-format/checksum validation. **USDT on TON is not enabled.** Always compare the address with the maintainer's wallet before sending. Never send funds to addresses supplied by third parties or unsolicited messages.
 
