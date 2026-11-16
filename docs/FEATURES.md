@@ -1,25 +1,12 @@
-# Salamanka TV 14 user-facing design
+# Possible later features
 
-The features below are **proposed**, not implemented. They should be introduced after essential hardware acceptance.
+This file is **not** a feature list for a working Salamanka firmware. None of the items below should be advertised as shipped.
 
-## Media Engine
-- Per-app and per-content AFR, EDID mode list, HDR/SDR policies, frame-rate/resolution diagnostics.
-- Supported output bit depth/color mode only; avoid impossible HDMI settings.
-- Decoder stats (codec name, hardware/software, dropped frames, frame pacing), optional performance HUD.
-- Audio profile output (HDMI, optical, analog, USB/Bluetooth), sync offset, passthrough status.
+- **Display/media controls:** content frame-rate matching, HDR/SDR behavior, HDMI/EDID and useful on-screen decode/frame-drop diagnostics.
+- **Remote controls:** original V01 microphone support, Bluetooth/HID diagnostics and button mapping where the input pipeline allows it.
+- **Power controls:** documented standby modes, wake sources, HDMI-CEC and state restoration.
+- **Performance:** CPU/GPU/thermal/memory data and profiles that do not interfere with normal video playback.
+- **Networking:** opt-in SSH/SFTP, VPN and access to NAS/media servers, with no privileged listener running by default.
+- **ARM64 Linux experiments:** a separate path for using the box beyond Android TV, without pretending this replaces reliable TV hardware support.
 
-## Remote Manager
-- V01 voice, V03 and compatible third-party remotes; HID/mic diagnostics.
-- Button mapping for sponsored/shortcut keys, long-press/double-press actions; event-level inspection.
-- Bluetooth connection/battery state where exposed; proper wake routing.
-
-## Power Manager
-- Sleep, network standby, supported deep sleep, reboot/shutdown, HDMI-CEC coordination.
-- Wake history and explicit separation of radio wake, IR wake, Bluetooth wake, network wake.
-
-## Performance + Network Suite
-- Thermal, memory, GPU, storage and background-work graphs.
-- Optional local SFTP/SSH, SMB/NFS, VPN, media server and background transfers; explicit opt-in and least privilege.
-- A TV-friendly launcher and task switcher with optional supported PiP/split screen.
-
-Avoid invented capability claims: availability depends on board-level drivers, HALs, app support and licenses.
+The first milestone remains a stable launcher, native storage and real audio/video/input support. [Roadmap](ROADMAP.md).

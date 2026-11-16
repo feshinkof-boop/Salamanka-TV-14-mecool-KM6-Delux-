@@ -1,22 +1,24 @@
-# Release gates — Stage 56 assessment, 16 November 2026
+# Conditions for an installable build
 
-This is a **physical Android 14 bring-up project, not a flashable ROM release**. All gates below require real evidence from KM6 Deluxe Rev1. An experimental RAM/NBD boot counts as meaningful bring-up but **not** a standalone installation.
+There is **no Salamanka TV 14 firmware release**. The existing Android 14 boot-complete result used the physical device with storage served from a PC. Passing that test does not justify flashing an image to internal storage.
 
-| Gate | Acceptance criteria | Current state |
+The following must be demonstrated on **KM6 Deluxe Rev. 1**, with exact source revisions, logs and artifact hashes.
+
+| Required result | Current evidence | Gate |
 | --- | --- | --- |
-| **A — architecture and boot** | ARM64-only Android 14 services; correct VINTF; clean cold boot, stable launcher and power cycle | **PARTIAL:** Android 14 services and boot_completed demonstrated; RenderThread crashes, runtime HAL audit incomplete |
-| **B — local storage and recovery** | Native eMMC enumerate/RW, valid partition access, independent recovery and tested A/B rollback | **BLOCKED:** CMD3 timeout; 12/12 backups verified, prior Android 11 healthy |
-| **C — display and video** | Stable SurfaceFlinger/Composer, proven actual screen output, hardware AVC/HEVC/AV1, HDR/AFR | **PARTIAL:** Panfrost/Mesa/1080p60/Composer shown in logs; final launcher and hardware codecs unverified |
-| **D — audio** | HDMI, SPDIF, analog and formats supported by the board | **UNKNOWN** |
-| **E — network, radio, remote** | Gigabit Ethernet, Wi-Fi, BT, original V01 voice, suspend/wake/CEC | **PARTIAL:** temporary NBD network path worked; full device functionality unknown |
-| **F — stability** | 24h/72h repeated playback, input and power-cycle tests, no fatal crashes | **BLOCKED:** known launcher abort |
-| **G — security** | SELinux enforcing, component provenance, no unreviewed OEM agents, verified updates and permissions | **BLOCKED:** recent physical testing permissive; complete security audit pending |
-| **H — distribution** | Local source parity, complete build hashes, compatible license review and safe signed deployment instructions | **BLOCKED:** firmware/source checkout not yet publicly mirrored |
+| ARM64 Android 14 boot on the device | `init`, Zygote, system_server and `sys.boot_completed=1` on NBD | **Partial**: needs independent local boot |
+| Stable usable UI | Composer3/SurfaceFlinger/display mode exercised | **Blocked**: HWUI RenderThread abort |
+| Native eMMC reads and persistent images | MMC CMD0–CMD2 complete | **Blocked**: CMD3 timeout |
+| Recoverable install / slot handling | 12 backup sets verified, Android 11 fallback boots | **Incomplete**: install/restore sequence not validated |
+| Secure Android permissions | Temporary tests permissive | **Blocked**: SELinux enforcing, provenance and final signing |
+| Media decode and playback | S905X4 hardware capability; graphics tests | **Not tested**: hardware Codec2/MediaCodec AVC, HEVC, AV1 |
+| TV sound | Device exposes HDMI/SPDIF/analog on existing firmware | **Not tested** on Salamanka |
+| Input, network and power | NBD test transport available | **Not tested** as complete TV services |
+| Durability | Short physical bring-up runs | **Not tested**: 24–72 hour media/network/input soak |
+| Reproducible public sources | Local development checkout exists | **Incomplete**: actual source and hashes not mirrored |
 
-## Current evidence is not the release evidence
+The next flashable image should include a source revision, build manifest, partitions and sizes, sha256 checksums, device revision, firmware/bootloader assumptions, precise limitations, recovery path and signing details appropriate for distribution.
 
-The latest reported test suite totals are **450 PASS / 3 SKIP**, while a separate acceptance matrix reports **230 PASS / 1 SKIP / 34 PARTIAL / 17 BLOCKED / 0 FAIL**. Neither proves all device drivers are ready. Raw detailed logs and the complete source tree are not presently on this repository.
+Never describe a firmware image as safe, compatible, certified, Widevine L1, Android TV Play-certified or Netflix-approved without independent evidence and legal entitlement.
 
-Requirements for any eventual release include revision-specific hashes, build/boot logs, architecture proof of every mandatory service, hardware video evidence, audio/peripheral tests, device data protection, signed update verification, recovery from interrupted boots, sanitized network captures and a clear limitation list.
-
-**No release image, flash link or inferred completion percentage should be published until the project passes these gates.**
+[Status](STATUS.md) · [Recovery](RECOVERY.md) · [Testing record](TESTING.md).

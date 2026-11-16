@@ -1,26 +1,21 @@
-# Project governance
+# Maintenance and publication
 
-This is **independent, experimental firmware development** for KM6 Deluxe Rev1, not an official MECOOL, AOSP, Google or slimBOX release.
+**Maintainer:** [@feshinkof-boop](https://github.com/feshinkof-boop).
 
-## Language for evidence
+This is an independent hardware-porting project. The actual engineering changes are maintained on the developer's local workstation; this public GitHub tree presently contains documentation, older investigations and limited host-side tooling.
 
-- **DEVICE-PASS:** procedure ran on the real board, with logs and repeatable observations.
-- **HOST-PASS:** source/image or utility tested on a workstation only.
-- **BUILT:** compilation produced named images, no proof of runtime.
-- **COMMUNITY REPORT:** a 4PDA owner described it; not independently verified.
-- **HYPOTHESIS:** plausible risk requiring experiments.
-- **UNKNOWN:** no adequate evidence.
+## Evidence rules
 
-Do not convert one classification to another without new artifacts.
+A successful local build is a **build result**. A temporary physical boot with PC-hosted NBD storage is a **device bring-up result**. Neither is an installable release. State explicitly when source logs are not mirrored here.
 
-## Design constraints
+Do not infer hardware functionality from marketing specifications or from the same SoC in another TV box. Avoid percentages, invented hours worked and unverified feature claims.
 
-A genuine **ARM64-only Android 14 userspace** is mandatory. The project must not claim a working 4K hardware decoder, audio or remote from compilation alone. Avoid unrecoverable bricks: never perform device writes in CI; invasive testing requires independent owner approval and a verified rescue path.
+## Contributions
 
-## Publication rights
+Any code contribution must preserve the author and source license. Proprietary vendor binaries need an explicit right to redistribute and a recorded hash/origin. Do not commit device-specific keys, TEE/Widevine material, private IP addresses, signing keys or backup images.
 
-**The owner has not selected a blanket public license.** Earlier publication of a CC BY 4.0 documentation license was premature and has been withdrawn for subsequent distribution. Original authors retain rights unless otherwise licensed. When real code is imported, retain upstream AOSP/Linux licenses and review proprietary blob redistribution permissions. Never commit Widevine/TEE material, per-device identifiers, private SSH credentials, network addresses, proprietary firmware dumps or private signing keys.
+No blanket license has been chosen for original project files. Upstream AOSP/Linux code remains under its existing terms.
 
-## Practical repository scope
+No automated task may flash or rewrite the KM6. Physical persistent changes require informed approval and a tested recovery plan.
 
-This GitHub repository currently includes project documents, historical sanitized research and host-side tools. The complete Kubuntu checkout and firmware build images are not available here; they must be imported from verified local sources rather than reconstructed by guessing.
+[Contributing](../CONTRIBUTING.md) · [Security](../SECURITY.md).

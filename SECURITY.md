@@ -1,11 +1,11 @@
-# Security policy
+# Security
 
-This is unreleased experimental firmware. **Do not flash builds from untrusted sources.**
+No installable Salamanka firmware has been released. Unknown builds or files claiming to be official Salamanka releases should not be flashed.
 
-Report suspected malware, unsafe flashing behavior or exposed credentials privately to the repository owner using GitHub's private vulnerability reporting if configured, or open a minimal issue without publishing personal identifiers or exploit payloads.
+Supply-chain auditing matters because of the published Videostrong/XCPE research, but it has **not** been proved that this exact KM6 Deluxe Rev. 1 unit is infected. The report and currently known indicators are documented in [the XCPE notes](security/XCPE-VIDEOSTRONG.md).
 
-Do not post TEE/DRM keys, API tokens, private signing keys, device serials, home IPs, Wi-Fi credentials or proprietary firmware dumps.
+The included `tools/rom_audit.py` scans already extracted filesystem trees and reports known indicators, ELF architecture and coverage gaps. A zero-hit report is **not** a clean bill of health.
 
-The project investigates XCPE supply-chain concerns but does not claim that every MECOOL device is infected or that its unreleased Android 14 images have passed a security audit.
+Please do not submit private exploit details or secrets in public issues. If enabled, use GitHub's private vulnerability reporting; otherwise share only a non-sensitive description with the maintainer until an appropriate private channel is agreed. Never post TEE/DRM keys, signing keys, seed phrases, home IPs or unique device identifiers.
 
-Only officially designated, hashed, provenance-documented releases should be used on physical hardware after testing and with independent recovery preparation.
+A future release requires component provenance, SELinux enforcing, verified update/recovery, secure defaults and device-level validation. [Release requirements](docs/RELEASE-CRITERIA.md).

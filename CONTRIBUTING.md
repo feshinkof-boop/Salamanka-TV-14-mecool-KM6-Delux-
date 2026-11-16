@@ -1,7 +1,13 @@
 # Contributing
 
-Contributions are welcome from people with KM6 Deluxe Rev 1 hardware, Amlogic SC2, Linux DRM/KMS, Panfrost, VPU, audio, 64-bit Android HAL, SELinux and security experience.
+This is a work-in-progress AOSP port for one board: **KM6 Deluxe Rev. 1 / S905X4**. If you have patches or relevant board logs, they are welcome.
 
-For bug reports include board revision, firmware/build number, steps to reproduce, observed/expected result and sanitized logs. Do not upload unique device identifiers, account names, MAC addresses, network credentials or TEE material.
+Before opening a hardware issue, include the board revision, kernel/Android version and how the device was booted (original Android 11, RAM, NBD or internal eMMC). Provide the exact failure and relevant sanitized logs, not just a screenshot of the problem.
 
-Use **HOST-PASS** and **DEVICE-PASS** accurately. If you did not test on KM6 Deluxe Rev 1 hardware, say so. No merges containing opaque vendor binaries without rights, sha256 and a documented purpose. No auto-flashing CI.
+Current areas where expertise would help: Linux MMC/eMMC command handling, Panfrost/DRM/KMS and Android HWUI, Amlogic video decoding, ASoC audio, the V01 Bluetooth microphone, AOSP SELinux and safe update/recovery.
+
+Do not publish MAC addresses, serials, private network details, account IDs, firmware keys or private device backups. Do not copy vendor binaries into the repo without verifying redistribution rights.
+
+Host-side unit tests are not device tests; describe which environment you actually used. Please avoid claims of a working ROM until a repeatable, standalone image is available.
+
+[Project status](docs/STATUS.md) · [Roadmap](docs/ROADMAP.md).

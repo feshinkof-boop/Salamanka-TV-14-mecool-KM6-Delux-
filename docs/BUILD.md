@@ -1,26 +1,22 @@
-# Build and physical bring-up provenance — November 2026
+# Build notes
 
-This project targets independent **AOSP Android TV 14 / native ARM64** on MECOOL KM6 Deluxe Rev1 (Amlogic S905X4/SC2), using a mainline-oriented **Linux 6.18.55** kernel baseline.
+The active AOSP and kernel work is on the maintainer's Kubuntu workstation. **This GitHub repository is not yet a complete source checkout and cannot produce a Salamanka TV 14 image by itself.**
 
-## From compilation to physical Android
+## Local work reported
 
-1. AOSP sources synced and an S905X4-targeted product configured; Soong/Kati and an ARM64 kernel compiled.
-2. Android images reported built locally: `system.img`, `system_ext.img`, `vendor.img`, `product.img`, `odm.img`, `super.img`, `vbmeta_system.img`. Original public image hashes and exact source revisions have not been provided here.
-3. Compiler and image integration obstacles involved SELinux types, FCM/VINTF declarations, DMA-BUF and graphics HAL/device labels. See [FCM analysis](FCM-ANALYSIS.md) for the distinction between Android 14 FCM 8 and Android 15 level 202404.
-4. Physical RAM boot experiments ran an AArch64 Android `init`, then `zygote64`, `system_server` and associated Binder services. GPU/HDMI progressed to DRM/KMS 1080p60 and AIDL Composer3/SurfaceFlinger.
-5. Temporary **NBD-backed** Android boots on real hardware then reported natural `sys.boot_completed=1`. One Stage 53 run reported **94.52s**, **219 Binder services**, SystemUI and Leanback HOME activity before a launcher RenderThread SIGABRT.
-6. Independent storage bring-up found a reproducible early eMMC MMC-command failure at **CMD3**, after CMD0/1/2 succeeded. Local eMMC remains inaccessible to the modern kernel; no persistent Android 14 device installation is claimed.
+- AOSP Android 14 sync and device-product configuration completed.
+- Soong/Kati and system, system_ext, vendor, product, ODM, super and vbmeta_system image generation reported successful.
+- Linux 6.18.55 ARM64 compiled for the S905X4 / SC2 target.
+- Subsequent physical RAM/ADNL bring-up ran Android `init`, `zygote64`, `system_server` and later reached `sys.boot_completed=1` with host-backed NBD images.
+- Real graphics integration progressed to Panfrost/Mesa, DRM/KMS, Composer3 and SurfaceFlinger; launcher remains unstable.
+- Internal eMMC storage remains inaccessible under the new kernel, so this is not a standalone build.
 
-## What the public repository contains
+The reported local Stage 56 checkpoint is `2e06096` and has **not been pushed here**. Do not confuse local build revisions with public GitHub commits or package a release based on these notes.
 
-Engineering status, milestones, historical sanitized bootloader/DTB analysis, XCPE research, acceptance plans, Python host-only ROM inspection and its synthetic GitHub Actions tests. The evolving kernel patches, full AOSP checkout, firmware images, NBD staging assets, build logs and physical device backup sets remain on the local development workstation—not automatically published here.
+## When source can be published
 
-## Before sharing images or claiming a reproducible build
+Import the actual device/product tree, kernel changes, HAL source, build manifests and reproducible scripts with their history and upstream license notices. Exclude proprietary blobs that cannot legally be redistributed, private images, TEE/DRM keys, Wi-Fi credentials, personal network addresses and private signing material.
 
-- Import the **actual, licensed** project source and pinned upstream revision manifests—not synthesized replacements.
-- Publish sanitized original build evidence and image SHA-256 digests, partition layouts and compatibility results.
-- Verify Linux eMMC access and preserve the known-good Android 11/recovery environment.
-- Verify all ARM64-only userspace services, image startup, display, Codec2 hardware decode, audio, radio/remote support, SELinux enforcing and long-term stability.
-- Pass signed/verified OTA and rollback gates with explicit approval before any dangerous device write.
+Accompany source imports with exact pinned AOSP revisions, sanitized build/test logs, SHA-256 image hashes and a list of unavoidable proprietary firmware dependencies. No dummy placeholder driver should be represented as a working HAL.
 
-**AOSP built, Android physically booted over NBD, but native storage and release validation remain unfinished.** [Full status](STATUS.md).
+[FCM investigation](FCM-ANALYSIS.md) · [Release gates](RELEASE-CRITERIA.md).

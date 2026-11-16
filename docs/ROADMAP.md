@@ -1,41 +1,53 @@
-# Engineering roadmap — updated 16 November 2026
+# Work list
 
-Salamanka TV 14 has progressed from offline image builds to **physical ARM64 Android 14 execution and temporary RAM/NBD boots reaching `sys.boot_completed=1`**. This does not establish persistent storage, a stable launcher or full hardware support.
+This is the current order of work as of Stage 56 (16 November 2026). Work is organized by what prevents a useful Android 14 build, not by feature announcements.
 
-## P0: release blockers
+## 1. Local storage: eMMC / CMD3
 
-| Priority | Required result | Current state |
-| --- | --- | --- |
-| **P0-01: Internal eMMC** | Reliable storage enumeration and native Android system/data access on KM6 Rev1 | **BLOCKED:** CMD0/1/2 pass; CMD3 times out (Stage 56). Do not guess or write partitions. |
-| **P0-02: Android UI** | Stable boot, launcher rendering, navigation and clean restart/shutdown | **PARTIAL:** boot_complete, 219 Binder, SystemUI/Leanback activity; RenderThread abort and visible display acceptance remain. |
-| **P0-03: Safe recovery/OTA** | Verified backups, clean A/B lifecycle, reproducible native recovery on exact revision | **PARTIAL:** 12/12 backups checked and existing Android 11 works; complete release recovery not proven. |
-| **P0-04: Framework/Composer** | Valid Android 14 FCM/VINTF/64-bit services, functioning HWUI/SurfaceFlinger | **PARTIAL:** AIDL Composer3 and GPU/DRM path progressed on hardware; full UI not stable. |
-| **P0-05: Hardware VPU** | Actual AVC/HEVC/AV1 4K decode via Android MediaCodec/Codec2 | **UNVERIFIED** |
-| **P0-06: Audio** | HDMI, optical SPDIF, analog audio, sync and supported passthrough | **UNVERIFIED** |
-| **P0-07: Remote and radios** | V01 microphone, input, Wi-Fi, Bluetooth, reliable wake | **UNVERIFIED** |
-| **P0-08: Networking and power** | Normal Ethernet, sleep/wake, DHCP, HDMI-CEC, sustained transfers | **PARTIAL:** NBD transport demonstrably used, general consumer connectivity not validated |
-| **P0-09: Release security** | SELinux enforcing, component provenance/SBOM, XCPE review, secure OTA and permissions | **BLOCKED:** temporary tests permissive; full audit still required |
-| **P0-10: Sustained reliability** | No fatal UI/system crashes in multi-day use | **BLOCKED:** launcher RenderThread SIGABRT |
+**Blocked.** Linux 6.18.55 gets through CMD0, CMD1 and CMD2 at 400 kHz, then times out on CMD3 (`SET_RELATIVE_ADDR`). The controller reports `SD_EMMC_STATUS=0xa1ff2800`; no internal block device appears.
 
-### Recommended engineering order
+Next: capture read-only controller state at CMD2 and CMD3 using board-specific register definitions and existing working-firmware references. Do not attempt persistent writes until reliable read-only enumeration is proven.
 
-1. **Trace eMMC CMD3 at low speed using reversible, owner-approved diagnostics** and distinguish protocol/card state from controller/DTB issues; do not modify persistent storage.
-2. **Reproduce and resolve HWUI/Leanback RenderThread abort**, capture actual on-screen result and cold-boot stability.
-3. Complete proper Linux MMC storage bring-up, native partition read/write safety planning and recovery proving *before* any firmware deployment.
-4. Restore strict SELinux/permissions, verify ARM64-only processes and valid HAL/VINTF declarations.
-5. Reintroduce and test media hardware decoder, all audio paths, radio/remote/standby and HDMI features on the real board.
-6. Finalize repeatable build evidence, binary provenance, security review and owner-approved safe release artifacts.
+[Investigation](EMMC.md)
 
-## P1: end-user quality
+## 2. Stable graphics and home screen
 
-- AFR/HDR10/SDR, EDID, HDMI-CEC, audio-video synchronization and multi-receiver testing.
-- Remote V01/V03 reliability, voice input, key mapping and standby behavior.
-- Ethernet/Wi-Fi/Bluetooth throughput and reconnection; safe network services off by default.
-- USB host and permitted storage accessories; **no microSD card is required or planned for the bring-up/recovery path**.
-- Signed updates, user-mode security defaults, explicit privacy controls, multi-day soak tests.
+**Blocked after substantial progress.** Panfrost/Mesa, HDMI 1080p60, Composer3 and SurfaceFlinger have been exercised. Android reaches SystemUI and Leanback HOME, but `libhwui` aborts from the RenderThread surface setup path.
 
-## P2: optional capabilities, not release guarantees
+Next: reproduce with exact logs and test a minimal graphics surface to separate allocator/fence/compositor problems from launcher behavior. Acceptance is a visible, stable Android TV home screen across repeated boots.
 
-Salamanka Media Engine, Remote Manager, Power Manager, Performance Manager, optional Network Suite, Android TV customization, Linux ARM64 experimentation and custom branding.
+[Investigation](GRAPHICS.md)
 
-**No P2 feature cancels a P0 blocker.** See [full status](STATUS.md), [effort](PROGRESS.md) and [release gates](RELEASE-CRITERIA.md).
+## 3. Standalone boot and recovery
+
+**Not ready.** Successful Android 14 boots so far require RAM plus host-supplied NBD storage. The known-good Android 11 installation must remain recoverable. Verify partition reads, chosen A/B strategy and rollback before any native installation.
+
+[Recovery conditions](RECOVERY.md)
+
+## 4. Android platform correctness and security
+
+Physical experiments still use permissive SELinux. Confirm all required Android services and vendor HALs really are ARM64; resolve any remaining VINTF/FCM mismatches against the actual source revision; remove unreviewed privileged components and document their origins. A public build should use reproducible, reviewed source and signing material controlled by the maintainer.
+
+[FCM background](FCM-ANALYSIS.md) · [Security](../SECURITY.md)
+
+## 5. Hardware functions
+
+None of the following should be marked working on Salamanka merely because it works on stock firmware:
+
+| Area | Acceptance on the real Rev. 1 |
+| --- | --- |
+| Video decode | Android hardware AVC/HEVC/AV1 at supported resolutions, with decoder identity and dropped-frame data |
+| Audio | HDMI, optical SPDIF and analog output; supported passthrough and sync |
+| Network | Gigabit Ethernet and Wi-Fi stable during media and standby |
+| Input | V01 voice microphone, key events, Bluetooth reconnect and third-party remotes |
+| Display | HDR/SDR, AFR, EDID handling and HDMI-CEC under supported modes |
+| Power | Repeated suspend/resume, no phantom wakes, clean shutdown |
+| Storage | Safe eMMC operation, USB host/removable storage |
+
+See [hardware details](HARDWARE.md) and [4PDA reports](../research/4PDA-COMMUNITY.md).
+
+## 6. After basic TV functionality works
+
+Possible additions: content-aware AFR/HDR controls and playback statistics, remote diagnostics/remapping, power and performance monitoring, optional network services, and Linux ARM64 use cases. These are proposals, not current build functionality.
+
+[Design notes](FEATURES.md) · [Release criteria](RELEASE-CRITERIA.md).

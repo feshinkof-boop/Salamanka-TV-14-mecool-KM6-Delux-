@@ -1,30 +1,45 @@
-# Architecture and design decisions
+# Architecture
 
-## Non-negotiable user requirements
+**Target:** KM6 Deluxe Rev. 1 (S905X4 / SC2-AH212).  
+**System:** AOSP Android TV 14, native ARM64 userspace.  
+**Kernel work:** Linux 6.18.55, mainline-oriented where practical.
 
-- Genuine **ARM64-only Android 14 userspace**. A 64-bit kernel + 32-bit Android is unacceptable. No permanent 32-bit-only HAL compatibility layer.
-- Prioritize an unrecoverable brick avoidance over speed or maintaining current multiboot. Build/test offline autonomously; physical writes require explicit owner approval and verified recovery plan.
-- Do not abandon the mainline-oriented Linux 6.18.55 work for convenience. An audited vendor/BSP path may be investigated as a separate reference.
-- Build stability, hardware support and security before cosmetic customization.
+## Main constraints
 
-## Kernel and framework tracks
+The device has a 64-bit Cortex-A55 CPU, but original Android firmware used 32-bit userspace. Salamanka is not intended to ship a 32-bit Android system behind a 64-bit kernel. The final system must have 64-bit Android runtime and required HALs.
 
-**Track A — mainline-oriented:** Linux 6.18.x ARM64, Meson DRM/KMS, Panfrost Mali G31, GBM/gralloc, HDMI, regulator/clock/reset, video acceleration via verified codec stack. Determine correct Android 14 FCM 8 compatibility first; HIDL 2.4 is deprecated but not automatically illegal. AIDL Composer3 may be a better long-term design, only after evidence and hardware validation.
+The original hardware software stack cannot be transplanted wholesale: Amlogic's older BSP has different kernel interfaces, graphics/media services, firmware and security assumptions. Any reused binary needs provenance, licensing review and a known purpose.
 
-**Track B — audited Amlogic BSP reference:** inspect known-good hardware drivers, DTBs, firmware and HAL behavior without inheriting entire proprietary OS image; port or rewrite 64-bit services as necessary. No unvetted OEM packages, remote administration or network clients.
+## Current experimental boot arrangement
 
-**Neither track is production-ready until device tests pass.** At present the status of video VPU, audio subsystem, HDMI-CEC, native voice remote and suspend/resume is unknown on Salamanka 14.
+```text
+KM6 ROM / existing boot chain
+          |
+          +-- controlled RAM boot --> Linux 6.18.55 / Android 14
+                                           |
+                                system images over NBD
+                                           |
+                                 init / Zygote / framework
+                                           |
+                              SurfaceFlinger / Composer3
+```
 
-## Native 64-bit verification
+The host serves storage to avoid overwriting the working Android 11 installation. This arrangement has reached Android boot-complete on real hardware, but it does not prove a self-contained eMMC boot.
 
-Check every required userspace ELF architecture, Zygote mode, `ro.product.cpu.abilist`, HAL/VINTF declarations, binder interfaces, runtime service startup and linker dependencies. A `file` report on binaries alone does not demonstrate 64-bit-only runtime.
+## Graphics and media are different jobs
 
-## Boot
+Panfrost/Mesa supplies GPU-side graphics work, while DRM/KMS and Composer3/SF supply display integration. The S905X4 hardware video decoder (VPU) is a distinct pipeline requiring drivers and an Android media HAL; GPU operation **does not** prove AV1/HEVC decoding.
 
-Existing slimBOX boot chain: BL33/U-Boot's embedded multi-DTB selected the live kernel DTB. The legacy `_aml_dtb` partition was not used along the observed boot path. See `research/BOOTCHAIN.md`.
+See [graphics](GRAPHICS.md).
 
-The secure release must publish an explicit partition list, boot/DTBO/vendor boot assumptions, A/B slot strategy, dynamic super group sizes, AVB signatures, rollback and recovery tests.
+## Storage and recovery
 
-## Intellectual property, licenses and credentials
+Linux 6.18 eMMC enumeration stops at CMD3. Until read-only block access and recovery are proven, moving Android to persistent storage is unsafe. Bootloader/TEE/partition writes are not an acceptable substitute for diagnosing the MMC controller.
 
-No Widevine keys, TEE provisioning assets, platform signing secrets or proprietary firmware dumps in public Git. Do not represent AOSP as equivalent to licensed Google TV or Netflix certification.
+See [eMMC](EMMC.md) and [recovery](RECOVERY.md).
+
+## Security
+
+Physical test boots have used permissive SELinux. Distribution requires enforcing policy, controlled privileged components, reviewed donor firmware, signing and rollback testing. A clean AOSP build is not automatically Google-certified or Widevine L1.
+
+[Current status](STATUS.md) · [Security investigation](../security/XCPE-VIDEOSTRONG.md).

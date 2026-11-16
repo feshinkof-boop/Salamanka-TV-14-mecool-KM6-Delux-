@@ -1,32 +1,26 @@
-# KM6 Deluxe Rev 1 hardware & acceptance matrix
+# Target hardware and validation gaps
 
-| Subsystem | Known hardware | Stock reference | Salamanka release acceptance |
-|---|---|---|---|
-| SoC | Amlogic S905X4 / SC2 / AH212 | Quad Cortex-A55 | Functional ARM64 boot and stability |
-| GPU | Mali-G31 MP2 | Hardware graphics | DRM/KMS, Panfrost/appropriate driver, accelerated UI and proper Android composition |
-| DRAM | 4 GB DDR4 | Existing platform | Memory pressure, suspend and multitasking validation |
-| Storage | 64 GB eMMC; A/B dynamic partitions on audited slimBOX | Userdata, system partitions | Reliable storage, safe update and verified rollback |
-| Ethernet | 1 Gbit | Working in some configurations | Negotiates gigabit and survives repeated networking / sleep tests |
-| WLAN | 2.4/5 GHz; 802.11ax-capable | Driver and board revision vary | Verified WLAN firmware and power recovery |
-| Bluetooth | 5.0 | Native remote support | Reliable original V01 HID + microphone and third-party remotes |
-| HDMI | Digital display and audio | 4K/HDR/AFR problems reported | EDID, mode switching, HDMI-CEC, stable AV sync |
-| Hardware video | S905X4 includes AV1 and HEVC decoder blocks | Codec support | Hardware AVC/HEVC/AV1 and real 4K decode not merely software playback |
-| SPDIF | Optical | Stock feature; some port regressions | PCM and supported passthrough receiver tests |
-| Analog audio | 3.5 mm | Stock feature | Audio routing and playback without dropouts |
-| USB | USB2 + USB3 | Host works; USB gadget ADB failed in Oct audit | Host disks/input and separate USB device-mode diagnosis |
-| microSD slot | Hardware feature | Present | Not a dependency: no microSD media available and no SD-based bring-up/recovery requirement |
-| Remote | MECOOL V01 original | Voice generally available on stock | Voice search and input stable across boot/standby |
+**Primary target:** MECOOL KM6 Deluxe Rev. 1, 4 GB RAM / 64 GB eMMC, Amlogic S905X4 (SC2/AH212), quad Cortex-A55 and Mali-G31 MP2. Different KM6 revisions may use different network and remote hardware. Do not apply a Rev. 2 test result to Rev. 1 without checking.
 
-**Do not merge KM6 Classic, KM6 Deluxe Rev 1 and later HDMI-marked Rev 2 results.** Hardware revisions may differ in LAN/BT/WLAN wiring. The 'HDMI' chassis marking is a community shorthand, not a substitute for board/SKU, DTB and peripheral identification.
+| Hardware area | Known board capability | Salamanka Android 14 evidence / outstanding work |
+| --- | --- | --- |
+| CPU | ARMv8-A / AArch64 | Native Android 14 userspace has executed on the board |
+| GPU | Mali-G31 | Panfrost/Mesa and Composer3/SF activity reported; stable UI still blocked |
+| HDMI | Digital video and audio | DRM/KMS at 1080p60; sound/CEC/HDR/AFR unverified |
+| eMMC | 64 GB | Linux 6.18 enumeration stops at CMD3 |
+| RAM | 4 GB | Framework and NBD-backed boot tests; production memory behavior not qualified |
+| VPU | Hardware AVC/HEVC/AV1 capability | Android 14 hardware decode **not verified** |
+| Audio | HDMI, optical SPDIF, analog | Android 14 drivers/HAL and passthrough **not verified** |
+| Ethernet | Gigabit LAN | NBD transport used; general device/network functionality not qualified |
+| Wi-Fi / BT | 2.4/5 GHz Wi-Fi and Bluetooth | Android 14 connection, recovery and V01 voice **not verified** |
+| USB | USB host ports | Host/device roles and accessories require revision-specific validation |
+| Remote | MECOOL original V01 | Voice microphone, HID mapping and standby still to be tested |
+| microSD | Slot present | Not used or required for experimental bring-up or recovery |
 
-## Test media
+## Media test requirements
 
-- 2160p H.264, HEVC Main/Main10, AV1, VP9 (as available); test supported profiles only.
-- SDR/HDR10 and 23.976/24/25/50/59.94/60fps content.
-- Lossless PCM stereo, AC3 5.1 optical/receiver path, HDMI multichannel where hardware supports.
-- Repeat 2h seek/pause/resume, 24h soak and 72h soak with activity logs after native storage, graphics and decoder gates pass.
-- Compare MediaCodec to software decode; log actual decoder names and dropped frames.
+Use repeatable 4K AVC, HEVC Main/Main10 and AV1 samples with actual MediaCodec decoder names, frame timings and dropped-frame statistics. Test HDMI and optical audio separately, including supported passthrough, pause/resume and lip sync. Run EDID/AFR/HDR and standby cycles only after basic video/audio work.
 
-## Root cause discipline
+The original firmware's capabilities are a reference, not proof that the new kernel and Android HAL support them.
 
-A disappearing picture or repeated reboot can be a power adapter, eMMC, cable, heat or firmware fault. Validate non-invasive hypotheses and basic configuration first. Do not claim software fixes untested hardware faults.
+[Status](STATUS.md) · [4PDA observations](../research/4PDA-COMMUNITY.md).
